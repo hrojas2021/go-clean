@@ -8,5 +8,9 @@ import (
 
 type CampaignRepository interface {
 	Noop(ca entities.Campaign) error
+	CampaignGetter
+}
+
+type CampaignGetter interface {
 	GetCampaignByID(campaign entities.GetCampaignRequest) (models.Campaign, *errors.ErrorResponse)
 }

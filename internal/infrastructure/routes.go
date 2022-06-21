@@ -17,7 +17,7 @@ func panicHandler(w http.ResponseWriter, r *http.Request, err interface{}) {
 }
 
 // InitRoutes mounts all defaut routes
-func (a *API) InitRoutes() *httprouter.Router {
+func InitRoutes(a *API) *httprouter.Router {
 	r := httprouter.New()
 	/********************** GLOBAL OPTIONS *****************/
 	r.GlobalOPTIONS = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
