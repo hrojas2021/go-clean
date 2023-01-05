@@ -7,4 +7,10 @@ DB:
   PORT: "5432"
   SSL: "disable"
 
+Telemetry:
+  Enabled: true
+  Name: "Default Project"
+  JaegerURL: http://localhost:16686
+  Version: "1"
+  Filepath: ""
 PORT: 9500
