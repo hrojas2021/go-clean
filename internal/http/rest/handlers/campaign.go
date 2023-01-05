@@ -1,4 +1,4 @@
-package controllers
+package handlers
 
 import (
 	"encoding/json"
@@ -10,17 +10,17 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-type CampaignController struct {
+type CampaignHandler struct {
 	campaignService service.CampaignService
 }
 
-func NewCampaignController(campaignService *service.CampaignService) *CampaignController {
-	return &CampaignController{
+func NewCampaignHandler(campaignService *service.CampaignService) *CampaignHandler {
+	return &CampaignHandler{
 		campaignService: *campaignService,
 	}
 }
 
-func (c *CampaignController) GetCampaign(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+func (c *CampaignHandler) GetCampaign(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	campaignID := params.ByName("campaignID")
 	var request models.GetCampaignRequest
 	request.ID = campaignID

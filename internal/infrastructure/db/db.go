@@ -1,4 +1,4 @@
-package infrastructure
+package db
 
 import (
 	"fmt"
@@ -23,9 +23,13 @@ func InitDB(config *conf.Configuration) *sqlx.DB {
 	if err != nil {
 		log.Fatalf("Failed to open DB via %s: %v", config.DB.URL, err)
 	}
+	err = db.Ping() // Err on docker?
+	if err != nil {
+		fmt.Println("ERROR")
+	}
+
 	db.SetMaxIdleConns(2)
 	db.SetMaxOpenConns(4)
 
-	log.Println("Connected to DB")
 	return db
 }

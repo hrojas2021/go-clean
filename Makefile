@@ -15,3 +15,9 @@ open-adminer:
 
 open-jaeger:
 	@open "http://localhost:16686"
+
+add-migration:
+	migrate create -ext sql -dir internal/migrations -seq $(name)
+
+execute-migrations:
+	go run cmd/migrate/main.go $(args)

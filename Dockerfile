@@ -10,7 +10,7 @@ RUN go mod download
 ADD . .
 
 #Build application
-RUN CGO_ENABLED=0 GOOS=linux go build -v cmd/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -v cmd/server/main.go
 
 #Step 2: Copy artifacts on clean image
 FROM alpine

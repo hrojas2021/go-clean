@@ -1,7 +1,9 @@
-package infrastructure
+package bootstrap
 
 import (
-	"github.com/hugo.rojas/custom-api/internal/controllers"
+	"github.com/hugo.rojas/custom-api/internal/http/rest"
+	"github.com/hugo.rojas/custom-api/internal/http/rest/handlers"
+	"github.com/hugo.rojas/custom-api/internal/infrastructure/api"
 	repository "github.com/hugo.rojas/custom-api/internal/repository/campaign"
 	service "github.com/hugo.rojas/custom-api/internal/service/campaign"
 )
@@ -12,10 +14,10 @@ type Bootstraper interface {
 }
 
 type bootstrap struct {
-	api *API
+	api *api.API
 }
 
-func NewBootstrap(a *API) Bootstraper {
+func NewBootstrap(a *api.API) Bootstraper {
 	return &bootstrap{
 		api: a,
 	}
@@ -27,13 +29,13 @@ func InitServices(b Bootstraper) {
 }
 
 func (b *bootstrap) startNoopService() {
-	initNoopRoutes(b.api)
+	rest.InitNoopRoutes(b.api)
 }
 
 func (b *bootstrap) startCampaignService() {
 	campaignRepository := repository.NewCampaignRepository(b.api.DB)
 	campaignService := service.NewCampaignService(&campaignRepository)
-	campaignController := controllers.NewCampaignController(&campaignService)
+	campaignController := handlers.NewCampaignHandler(&campaignService)
 
-	initCampaignRoutes(b.api, campaignController)
+	rest.InitCampaignRoutes(b.api, campaignController)
 }
