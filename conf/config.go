@@ -21,7 +21,7 @@ type DBConfiguration struct {
 
 // Configuration holds all configuration for this project
 type Configuration struct {
-	PORT int `default:"9000"`
+	PORT int `default:"9500"`
 	DB   DBConfiguration
 }
 

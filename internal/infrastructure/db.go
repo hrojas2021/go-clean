@@ -21,14 +21,11 @@ func InitDB(config *conf.Configuration) *sqlx.DB {
 	)
 	db, err := sqlx.Open(dbType, dbConnection)
 	if err != nil {
-		log.Fatalf("Failed to ping DB via %s: %v", config.DB.URL, err)
+		log.Fatalf("Failed to open DB via %s: %v", config.DB.URL, err)
 	}
-	// db.SetMaxIdleConns(0)
-	// db.SetMaxOpenConns(2)
+	db.SetMaxIdleConns(2)
+	db.SetMaxOpenConns(4)
 
-	if err = db.Ping(); err != nil {
-		log.Fatalf("Failed to ping DB via %s: %v", config.DB.URL, err)
-	}
 	log.Println("Connected to DB")
 	return db
 }

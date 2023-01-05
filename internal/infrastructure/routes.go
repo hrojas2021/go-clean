@@ -51,8 +51,6 @@ func InitRoutes(a *API) *httprouter.Router {
 	r.PanicHandler = panicHandler
 
 	/********************** GROUP ROUTES *****************/
-	// group routes
-	// auth middleware
 	return r
 }
 

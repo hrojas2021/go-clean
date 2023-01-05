@@ -1,0 +1,31 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    volumes: 
+      - ../.project-data/postgresql:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: 'root'
+      POSTGRES_PASSWORD: 'root'
+      POSTGRES_DB: 'go-clean'
+    ports:
+      - "5432:5432"
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+  go:
+    container_name: accounts
+    build:
+      context: .
+    ports:
+      - 9500:9500
+    depends_on:
+      - "postgres"
+  jaeger:
+    image: jaegertracing/opentelemetry-all-in-one
+    ports:
+      - 14268:14268
+      - 16686:16686
+  

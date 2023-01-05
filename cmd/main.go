@@ -12,6 +12,8 @@ import (
 func loadViperConfig() *conf.Configuration {
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
+	viper.AddConfigPath("/app/config")
+	viper.SetConfigType("yaml")
 	var configuration conf.Configuration
 
 	if err := viper.ReadInConfig(); err != nil {
@@ -25,9 +27,7 @@ func loadViperConfig() *conf.Configuration {
 }
 
 func main() {
-	// loadViperConfig()
-	var configFile = ""
-	config := conf.LoadConfig(configFile)
+	config := loadViperConfig()
 	db := infrastructure.InitDB(config)
 
 	api := infrastructure.NewAPI(db, config)
