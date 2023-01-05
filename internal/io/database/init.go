@@ -1,4 +1,4 @@
-package db
+package database
 
 import (
 	"fmt"
@@ -6,7 +6,6 @@ import (
 
 	"github.com/hugo.rojas/custom-api/conf"
 	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
 )
 
 const dbType = "postgres"

@@ -11,7 +11,6 @@ import (
 
 	"github.com/hugo.rojas/custom-api/conf"
 	"github.com/hugo.rojas/custom-api/internal/http/rest"
-	"github.com/hugo.rojas/custom-api/internal/infrastructure/db"
 	"github.com/hugo.rojas/custom-api/internal/io"
 	"github.com/hugo.rojas/custom-api/internal/io/database"
 	"github.com/hugo.rojas/custom-api/internal/service"
@@ -45,7 +44,7 @@ func main() {
 	ctx, shutdown := context.WithCancel(context.Background())
 	defer shutdown()
 	config := conf.LoadViperConfig()
-	db := db.InitDB(config)
+	db := database.InitDB(config)
 
 	io := io.New(database.New(db))
 
