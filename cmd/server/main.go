@@ -21,6 +21,15 @@ type server struct {
 	srv *http.Server
 }
 
+func newServer(r *httprouter.Router, h string) server {
+	return server{
+		srv: &http.Server{
+			Addr:    h,
+			Handler: r,
+		},
+	}
+}
+
 func main() {
 	config := conf.LoadViperConfig()
 	db := db.InitDB(config)
@@ -35,15 +44,6 @@ func main() {
 
 	srv := newServer(api.Handler, addr)
 	listenAndServe(&srv)
-}
-
-func newServer(r *httprouter.Router, h string) server {
-	return server{
-		srv: &http.Server{
-			Addr:    h,
-			Handler: r,
-		},
-	}
 }
 
 func listenAndServe(s *server) {
