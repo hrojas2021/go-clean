@@ -6,6 +6,7 @@ import (
 
 	"github.com/hugo.rojas/custom-api/conf"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 const dbType = "postgres"
@@ -30,6 +31,5 @@ func InitDB(config *conf.Configuration) *sqlx.DB {
 
 	db.SetMaxIdleConns(2)
 	db.SetMaxOpenConns(4)
-
 	return db
 }

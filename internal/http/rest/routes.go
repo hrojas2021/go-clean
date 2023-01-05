@@ -6,8 +6,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"github.com/hugo.rojas/custom-api/internal/http/rest/handlers"
-	"github.com/hugo.rojas/custom-api/internal/infrastructure/api"
+	"github.com/hugo.rojas/custom-api/internal/iface"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -18,7 +17,7 @@ func panicHandler(w http.ResponseWriter, r *http.Request, err interface{}) {
 }
 
 // InitRoutes mounts all defaut routes
-func InitRoutes(a *api.API) *httprouter.Router {
+func InitRoutes(service iface.Service) *httprouter.Router {
 	r := httprouter.New()
 	/********************** GLOBAL OPTIONS *****************/
 	r.GlobalOPTIONS = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -53,16 +52,4 @@ func InitRoutes(a *api.API) *httprouter.Router {
 
 	/********************** GROUP ROUTES *****************/
 	return r
-}
-
-func InitNoopRoutes(a *api.API) {
-	a.Handler.GET("/noop", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode("Noop endpoint running - OK")
-	})
-}
-
-func InitCampaignRoutes(a *api.API, c *handlers.CampaignHandler) {
-	a.Handler.GET("/campaigns/:campaignID", c.GetCampaign)
 }
