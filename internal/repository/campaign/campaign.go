@@ -30,7 +30,7 @@ func (r *repoCampaign) GetCampaignByID(request entities.GetCampaignRequest) (mod
 	args := []interface{}{request.ID}
 	q := strings.Builder{}
 	q.WriteString(`
-		SELECT id,name,created_at,updated_at,deleted_at
+		SELECT id,name,created_at,updated_at
 		FROM campaigns
 		WHERE id = $1
 	`)
