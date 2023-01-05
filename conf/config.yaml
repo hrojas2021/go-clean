@@ -10,7 +10,7 @@ DB:
 Telemetry:
   Enabled: true
   Name: "Default Project"
-  JaegerURL: http://localhost:16686
+  JaegerURL: "http://localhost:14268/api/traces"
   Version: "1"
   Filepath: ""
 PORT: 9500

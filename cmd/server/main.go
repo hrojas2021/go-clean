@@ -42,19 +42,20 @@ func newServer(r *httprouter.Router, h string) server {
 
 func main() {
 
-	ctx := context.Background()
+	ctx, shutdown := context.WithCancel(context.Background())
+	defer shutdown()
 	config := conf.LoadViperConfig()
 	db := db.InitDB(config)
 
 	io := io.New(database.New(db))
 
 	var tp *trace.TracerProvider
+
 	if config.Telemetry.Enabled {
 		tp, err := newTraceProvider(ctx, config.Telemetry)
 		if err != nil {
 			log.Fatal("Error converting the steps: ", err.Error())
 		}
-
 		io = telemetry.NewIO(io, tp)
 	}
 
@@ -64,14 +65,12 @@ func main() {
 	}
 
 	r := rest.InitRoutes(service)
-
 	addr := fmt.Sprintf("%v:%v", "", config.PORT)
-
 	srv := newServer(r, addr)
-	listenAndServe(&srv)
+	listenAndServe(ctx, &srv)
 }
 
-func listenAndServe(s *server) {
+func listenAndServe(ctx context.Context, s *server) {
 
 	go func() {
 		if err := s.srv.ListenAndServe(); err != nil {
@@ -88,7 +87,7 @@ func listenAndServe(s *server) {
 	<-quit
 	log.Println("Shutdown Server ...")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 	if err := s.srv.Shutdown(ctx); err != nil {
 		log.Fatal("Server Shutdown:", err)
