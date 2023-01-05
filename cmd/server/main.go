@@ -1,13 +1,19 @@
-package infrastructure
+package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
+	"github.com/hugo.rojas/custom-api/conf"
+	"github.com/hugo.rojas/custom-api/internal/http/rest"
+	"github.com/hugo.rojas/custom-api/internal/infrastructure/api"
+	"github.com/hugo.rojas/custom-api/internal/infrastructure/bootstrap"
+	"github.com/hugo.rojas/custom-api/internal/infrastructure/db"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -15,7 +21,7 @@ type server struct {
 	srv *http.Server
 }
 
-func NewServer(r *httprouter.Router, h string) server {
+func newServer(r *httprouter.Router, h string) server {
 	return server{
 		srv: &http.Server{
 			Addr:    h,
@@ -24,7 +30,23 @@ func NewServer(r *httprouter.Router, h string) server {
 	}
 }
 
-func (s *server) ListenAndServe() {
+func main() {
+	config := conf.LoadViperConfig()
+	db := db.InitDB(config)
+
+	api := api.NewAPI(db, config)
+	api.Handler = rest.InitRoutes(api)
+
+	addr := fmt.Sprintf("%v:%v", "", config.PORT)
+
+	b := bootstrap.NewBootstrap(api)
+	bootstrap.InitServices(b)
+
+	srv := newServer(api.Handler, addr)
+	listenAndServe(&srv)
+}
+
+func listenAndServe(s *server) {
 
 	go func() {
 		if err := s.srv.ListenAndServe(); err != nil {
@@ -36,7 +58,7 @@ func (s *server) ListenAndServe() {
 
 	// Wait for interrupt signal to gracefully shutdown the server with
 	// a timeout of 5 seconds.
-	quit := make(chan os.Signal)
+	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
 	log.Println("Shutdown Server ...")

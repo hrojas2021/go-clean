@@ -1,4 +1,4 @@
-package infrastructure
+package rest
 
 import (
 	"encoding/json"
@@ -6,7 +6,8 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"github.com/hugo.rojas/custom-api/internal/controllers"
+	"github.com/hugo.rojas/custom-api/internal/http/rest/handlers"
+	"github.com/hugo.rojas/custom-api/internal/infrastructure/api"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -17,7 +18,7 @@ func panicHandler(w http.ResponseWriter, r *http.Request, err interface{}) {
 }
 
 // InitRoutes mounts all defaut routes
-func InitRoutes(a *API) *httprouter.Router {
+func InitRoutes(a *api.API) *httprouter.Router {
 	r := httprouter.New()
 	/********************** GLOBAL OPTIONS *****************/
 	r.GlobalOPTIONS = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -51,12 +52,10 @@ func InitRoutes(a *API) *httprouter.Router {
 	r.PanicHandler = panicHandler
 
 	/********************** GROUP ROUTES *****************/
-	// group routes
-	// auth middleware
 	return r
 }
 
-func initNoopRoutes(a *API) {
+func InitNoopRoutes(a *api.API) {
 	a.Handler.GET("/noop", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -64,6 +63,6 @@ func initNoopRoutes(a *API) {
 	})
 }
 
-func initCampaignRoutes(a *API, c *controllers.CampaignController) {
+func InitCampaignRoutes(a *api.API, c *handlers.CampaignHandler) {
 	a.Handler.GET("/campaigns/:campaignID", c.GetCampaign)
 }

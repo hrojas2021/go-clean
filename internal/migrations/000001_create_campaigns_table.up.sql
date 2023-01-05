@@ -1,0 +1,8 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE TABLE IF NOT EXISTS campaigns (
+   id uuid NOT NULL DEFAULT uuid_generate_v4(),
+   name VARCHAR (128),
+   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   PRIMARY KEY (id)
+);
