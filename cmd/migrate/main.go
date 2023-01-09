@@ -11,7 +11,7 @@ import (
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/hugo.rojas/custom-api/conf"
-	"github.com/hugo.rojas/custom-api/internal/infrastructure/db"
+	"github.com/hugo.rojas/custom-api/internal/io/database"
 )
 
 const (
@@ -26,7 +26,7 @@ func main() {
 	}
 
 	config := conf.LoadViperConfig()
-	db := db.InitDB(config)
+	db := database.InitDB(config)
 
 	driver, err := postgres.WithInstance(db.DB, &postgres.Config{})
 	if err != nil {

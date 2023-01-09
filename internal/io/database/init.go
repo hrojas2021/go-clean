@@ -1,4 +1,4 @@
-package db
+package database
 
 import (
 	"fmt"
@@ -30,6 +30,5 @@ func InitDB(config *conf.Configuration) *sqlx.DB {
 
 	db.SetMaxIdleConns(2)
 	db.SetMaxOpenConns(4)
-
 	return db
 }

@@ -20,10 +20,20 @@ type DBConfiguration struct {
 	SSL      string
 }
 
+// Configuration holds all openTelemetry configuration
+type TelemetryConfiguration struct {
+	Enabled   bool
+	Name      string
+	JaegerURL string
+	Version   string
+	FilePath  string
+}
+
 // Configuration holds all configuration for this project
 type Configuration struct {
-	PORT int `default:"9500"`
-	DB   DBConfiguration
+	PORT      int `default:"9500"`
+	DB        DBConfiguration
+	Telemetry TelemetryConfiguration
 }
 
 func loadEnvironment(filename string) error {

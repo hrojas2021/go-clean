@@ -1,68 +1,83 @@
 package rest
 
 import (
-	"encoding/json"
-	"log"
+	"io"
 	"net/http"
-	"runtime/debug"
 
 	"github.com/hugo.rojas/custom-api/internal/http/rest/handlers"
-	"github.com/hugo.rojas/custom-api/internal/infrastructure/api"
-	"github.com/julienschmidt/httprouter"
+	"github.com/hugo.rojas/custom-api/internal/iface"
+	"github.com/uptrace/bunrouter"
+	"github.com/uptrace/bunrouter/extra/reqlog"
 )
 
-func panicHandler(w http.ResponseWriter, r *http.Request, err interface{}) {
-	log.Println(r.URL.Path, string(debug.Stack()))
-	debug.PrintStack()
-	w.WriteHeader(http.StatusInternalServerError)
-}
-
 // InitRoutes mounts all defaut routes
-func InitRoutes(a *api.API) *httprouter.Router {
-	r := httprouter.New()
-	/********************** GLOBAL OPTIONS *****************/
-	r.GlobalOPTIONS = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Header.Get("Access-Control-Request-Method") != "" {
-			// Set CORS headers
-			header := w.Header()
-			header.Set("Access-Control-Allow-Methods", header.Get("Allow"))
-			header.Set("Access-Control-Allow-Origin", "*")
-		}
-		w.WriteHeader(http.StatusNoContent)
+func InitRoutes(service iface.Service) *bunrouter.CompatRouter {
+	// https://bunrouter.uptrace.dev/guide/golang-router.html#installation
+	r := bunrouter.New(
+		bunrouter.Use(reqlog.NewMiddleware()),
+		// add default error routes
+	).Compat()
+
+	// r.Use(Telemetry())
+
+	h := handlers.New(service)
+	// 	// r.Use(Recoverer(resp))  CHECK Recoverer and Check if Resp is needed
+
+	api := r.NewGroup("/api", bunrouter.Use(errorHandler))
+	api.WithGroup("/", func(g *bunrouter.CompatGroup) {
+		g.GET("/campaigns/:id", h.GetCampaign)
 	})
 
-	/********************** PUBLIC ROUTES *****************/
-	r.GET("/healthcheck", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode("API running - OK")
-	})
-
-	/********************** DEFAULT ERROR  ROUTES *****************/
-	r.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusNotFound)
-	})
-
-	r.MethodNotAllowed = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusMethodNotAllowed)
-	})
-
-	r.PanicHandler = panicHandler
-
-	/********************** GROUP ROUTES *****************/
 	return r
 }
 
-func InitNoopRoutes(a *api.API) {
-	a.Handler.GET("/noop", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode("Noop endpoint running - OK")
-	})
+func errorHandler(next bunrouter.HandlerFunc) bunrouter.HandlerFunc {
+
+	return func(w http.ResponseWriter, req bunrouter.Request) error {
+		err := next(w, req)
+
+		switch err := err.(type) {
+		case nil:
+			// no error
+		case HTTPError:
+			w.WriteHeader(err.statusCode)
+			_ = bunrouter.JSON(w, err)
+		default:
+			httpErr := NewHTTPError(err)
+			w.WriteHeader(httpErr.statusCode)
+			_ = bunrouter.JSON(w, httpErr)
+		}
+
+		return err
+	}
 }
 
-func InitCampaignRoutes(a *api.API, c *handlers.CampaignHandler) {
-	a.Handler.GET("/campaigns/:campaignID", c.GetCampaign)
+type HTTPError struct {
+	statusCode int
+
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
+func (e HTTPError) Error() string {
+	return e.Message
+}
+
+func NewHTTPError(err error) HTTPError {
+	switch err {
+	case io.EOF:
+		return HTTPError{
+			statusCode: http.StatusBadRequest,
+
+			Code:    "eof",
+			Message: "EOF reading HTTP request body",
+		}
+	}
+
+	return HTTPError{
+		statusCode: http.StatusInternalServerError,
+
+		Code:    "internal",
+		Message: "Internal server error",
+	}
 }
