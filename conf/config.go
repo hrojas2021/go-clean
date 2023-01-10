@@ -29,9 +29,15 @@ type TelemetryConfiguration struct {
 	FilePath  string
 }
 
+// Configuration holds all jwt configuration
+type SecuriyConfiguration struct {
+	SECRET string
+}
+
 // Configuration holds all configuration for this project
 type Configuration struct {
-	PORT      int `default:"9500"`
+	JWT       SecuriyConfiguration
+	PORT      int `default:"9000"`
 	DB        DBConfiguration
 	Telemetry TelemetryConfiguration
 }
@@ -65,7 +71,7 @@ func LoadConfig(filename string) *Configuration {
 
 func LoadViperConfig() *Configuration {
 	viper.SetConfigName("config")
-	viper.AddConfigPath(".")
+	viper.AddConfigPath("./conf")
 	viper.AddConfigPath("/app/config")
 	viper.SetConfigType("yaml")
 	var configuration Configuration

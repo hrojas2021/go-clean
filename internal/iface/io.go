@@ -7,5 +7,6 @@ import (
 )
 
 type IO interface {
-	GetCampaign(ctx context.Context, campaign *entities.Campaign) error
+	FilterUsers(ctx context.Context) ([]entities.User, error)
+	SaveRoom(ctx context.Context, room *entities.Room) error
 }

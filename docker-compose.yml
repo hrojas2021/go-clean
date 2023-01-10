@@ -20,7 +20,7 @@ services:
     build:
       context: .
     ports:
-      - 9500:9500
+      - 9000:9000
     depends_on:
       - "postgres"
   jaeger:

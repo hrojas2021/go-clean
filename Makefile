@@ -2,7 +2,7 @@ docker-build:
 	docker build -t go-clean .
 
 docker-run: docker-build
-	docker run -it --rm --name go-clean -p 9500:9500 go-clean 
+	docker run -it --rm --name go-clean -p 9000:9000 go-clean 
 
 compose-down:
 	docker compose down

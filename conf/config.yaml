@@ -13,4 +13,6 @@ Telemetry:
   JaegerURL: "http://localhost:14268/api/traces"
   Version: "1"
   Filepath: ""
-PORT: 9500
+JWT:
+  SECRET: "ZTP02X517M4PUND7"
+PORT: 9000

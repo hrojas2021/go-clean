@@ -7,4 +7,4 @@ DB:
   PORT: "5432"
   SSL: "disable"
 
-PORT: 9500
+PORT: 9000

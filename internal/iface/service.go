@@ -3,10 +3,12 @@ package iface
 import (
 	"context"
 
-	"github.com/google/uuid"
 	"github.com/hugo.rojas/custom-api/internal/domain/entities"
+	"github.com/hugo.rojas/custom-api/internal/domain/models"
 )
 
 type Service interface {
-	GetCampaign(ctx context.Context, campaignID uuid.UUID) (*entities.Campaign, error)
+	ListUser(ctx context.Context) ([]entities.User, error)
+
+	SaveRoom(ctx context.Context, room models.Room) (entities.Room, error)
 }
