@@ -50,6 +50,7 @@ func InitRoutes(service iface.Service, conf *conf.Configuration) *bunrouter.Comp
 	api := r.NewGroup("/api", bunrouter.Use(middlewares.Authenticate))
 	api.WithGroup("/", func(g *bunrouter.CompatGroup) {
 		g.GET("/users", h.ListUsers)
+		g.POST("/login", h.Login)
 		g.POST("/rooms", h.SaveRoom)
 	})
 

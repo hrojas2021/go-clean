@@ -8,5 +8,6 @@ import (
 
 type IO interface {
 	FilterUsers(ctx context.Context) ([]entities.User, error)
+	LoginUser(ctx context.Context, user *entities.User) error
 	SaveRoom(ctx context.Context, room *entities.Room) error
 }

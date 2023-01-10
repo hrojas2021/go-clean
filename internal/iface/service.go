@@ -9,6 +9,7 @@ import (
 
 type Service interface {
 	ListUser(ctx context.Context) ([]entities.User, error)
+	Login(context.Context, models.User) error
 
 	SaveRoom(ctx context.Context, room models.Room) (entities.Room, error)
 }
