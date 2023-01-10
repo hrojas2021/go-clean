@@ -14,3 +14,7 @@ type User struct {
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
+
+type JWT struct {
+	Token string `json:"token"`
+}

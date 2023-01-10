@@ -31,7 +31,8 @@ type TelemetryConfiguration struct {
 
 // Configuration holds all jwt configuration
 type SecuriyConfiguration struct {
-	SECRET string
+	SECRET     string
+	EXPIRATION int
 }
 
 // Configuration holds all configuration for this project

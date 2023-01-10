@@ -3,7 +3,7 @@ Refactor dependency injections -> withInterfaces X
 Add Open Telemetry X
 Add Query with new Implementation X
 
-Finish JWT logic
+Finish JWT logic X
 Add Errors package
 Fix Middlewares - Fix SECRET in Middleware
 Add Gomock

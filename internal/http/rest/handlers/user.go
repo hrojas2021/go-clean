@@ -45,6 +45,18 @@ func (h *Handle) Login(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	err = h.service.Login(req.Context(), user)
-	_ = err
+	token, err := h.service.Login(req.Context(), user)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(token); err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+	}
+
 }

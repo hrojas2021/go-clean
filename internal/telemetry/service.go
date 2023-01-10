@@ -38,7 +38,7 @@ func (s *Service) ListUser(ctx context.Context) ([]entities.User, error) {
 	return s.service.ListUser(ctx)
 }
 
-func (s *Service) Login(ctx context.Context, user models.User) error {
+func (s *Service) Login(ctx context.Context, user models.User) (*models.JWT, error) {
 	ctx, span := otel.Tracer(s.name).Start(ctx, "LoginUser")
 	defer span.End()
 

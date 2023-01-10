@@ -1,11 +1,6 @@
 package rest
 
 import (
-	"fmt"
-	"net/http"
-	"time"
-
-	"github.com/dgrijalva/jwt-go"
 	"github.com/hugo.rojas/custom-api/conf"
 	"github.com/hugo.rojas/custom-api/internal/http/rest/handlers"
 	"github.com/hugo.rojas/custom-api/internal/http/rest/middlewares"
@@ -13,21 +8,6 @@ import (
 	"github.com/uptrace/bunrouter"
 	"github.com/uptrace/bunrouter/extra/reqlog"
 )
-
-func createJWT(secret string) (string, error) {
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(time.Hour).Unix()
-
-	tokenStr, err := token.SignedString([]byte(secret))
-
-	if err != nil {
-		fmt.Println(err.Error())
-		return "", err
-	}
-
-	return tokenStr, nil
-}
 
 // InitRoutes mounts all defaut routes
 func InitRoutes(service iface.Service, conf *conf.Configuration) *bunrouter.CompatRouter {
@@ -39,18 +19,11 @@ func InitRoutes(service iface.Service, conf *conf.Configuration) *bunrouter.Comp
 
 	h := handlers.New(service)
 
-	r.GET("/hugo", func(w http.ResponseWriter, req *http.Request) { // CONVERT INTO SERVICE
-		token, err := createJWT(conf.JWT.SECRET)
-		if err != nil {
-			return
-		}
-		fmt.Fprint(w, token)
-	})
+	r.POST("/login", h.Login)
 
 	api := r.NewGroup("/api", bunrouter.Use(middlewares.Authenticate))
 	api.WithGroup("/", func(g *bunrouter.CompatGroup) {
 		g.GET("/users", h.ListUsers)
-		g.POST("/login", h.Login)
 		g.POST("/rooms", h.SaveRoom)
 	})
 
