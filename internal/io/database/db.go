@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // for DB
 )
 
 type Database struct {
@@ -29,7 +29,6 @@ func New(db *sqlx.DB) *Database {
 
 func (d *Database) Filter(ctx context.Context, query, defaultFields string, limit, offset uint, total *uint, dest any,
 	fns ...func(args *Args)) error {
-
 	args := Args{
 		Fields: []string{defaultFields},
 	}
@@ -38,7 +37,7 @@ func (d *Database) Filter(ctx context.Context, query, defaultFields string, limi
 		fn(&args)
 	}
 
-	var after string = ""
+	var after string
 	if len(args.Join) > 0 {
 		after += fmt.Sprintf(" WHERE %s", strings.Join(args.Where, " AND "))
 	}

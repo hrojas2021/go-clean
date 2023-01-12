@@ -15,13 +15,13 @@ import (
 )
 
 const (
-	ACTION_UP   = "up"
-	ACTION_DOWN = "down"
+	actionUp   = "up"
+	actionDown = "down"
 )
 
 func main() {
 	args := os.Args[1:]
-	if args[0] != ACTION_UP && args[0] != ACTION_DOWN {
+	if args[0] != actionUp && args[0] != actionDown {
 		log.Fatal("Invalid input. Unable to run migrations")
 	}
 
@@ -44,8 +44,8 @@ func main() {
 		log.Fatal("Error on creating the migrator: ", err.Error())
 	}
 
-	var migrationFactor int = 1
-	if args[0] == ACTION_DOWN {
+	var migrationFactor = 1
+	if args[0] == actionDown {
 		migrationFactor = -1
 	}
 
@@ -56,10 +56,10 @@ func main() {
 		}
 		err = m.Steps(steps * migrationFactor)
 	} else {
-		if args[0] == ACTION_UP {
+		if args[0] == actionUp {
 			err = m.Up()
 		}
-		if args[0] == ACTION_DOWN {
+		if args[0] == actionDown {
 			err = m.Down()
 		}
 	}

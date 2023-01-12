@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -12,7 +13,6 @@ import (
 )
 
 func (s *Service) ListUser(ctx context.Context) ([]entities.User, error) {
-
 	return s.io.FilterUsers(ctx)
 }
 
@@ -37,8 +37,12 @@ func (s *Service) Login(ctx context.Context, user models.User) (*models.JWT, err
 }
 
 func createJWT(config conf.SecuriyConfiguration, username string) (string, error) {
+	var tokenStr string
 	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return tokenStr, errors.New("error while fetching the claims;")
+	}
 	claims["exp"] = time.Now().Add(time.Duration(config.EXPIRATION) * time.Minute).Unix()
 	claims["username"] = username
 
@@ -46,7 +50,7 @@ func createJWT(config conf.SecuriyConfiguration, username string) (string, error
 
 	if err != nil {
 		fmt.Println(err.Error())
-		return "", err
+		return tokenStr, err
 	}
 
 	return tokenStr, nil

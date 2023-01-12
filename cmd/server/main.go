@@ -33,14 +33,14 @@ type server struct {
 func newServer(r *bunrouter.CompatRouter, h string) server {
 	return server{
 		srv: &http.Server{
-			Addr:    h,
-			Handler: r,
+			Addr:              h,
+			Handler:           r,
+			ReadHeaderTimeout: 3 * time.Second,
 		},
 	}
 }
 
 func main() {
-
 	ctx, shutdown := context.WithCancel(context.Background())
 	defer shutdown()
 	config := conf.LoadViperConfig()
@@ -68,7 +68,6 @@ func main() {
 }
 
 func listenAndServe(ctx context.Context, s *server) {
-
 	go func() {
 		if err := s.srv.ListenAndServe(); err != nil {
 			log.Fatal("listen: ", err)

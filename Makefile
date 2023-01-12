@@ -21,3 +21,6 @@ add-migration:
 
 execute-migrations:
 	go run cmd/migrate/main.go $(args)
+
+linter:
+	golangci-lint run

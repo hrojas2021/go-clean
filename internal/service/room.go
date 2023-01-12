@@ -8,7 +8,6 @@ import (
 )
 
 func (s *Service) SaveRoom(ctx context.Context, room models.Room) (entities.Room, error) {
-
 	r := &entities.Room{
 		Name: room.Name,
 	}

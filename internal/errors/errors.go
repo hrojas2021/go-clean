@@ -2,31 +2,36 @@ package errors
 
 import (
 	"errors"
-	"net/http"
 )
 
-type ErrorResponse struct {
-	StatusCode int
-	Err        error
-}
+var (
+	As     = errors.As
+	Is     = errors.Is
+	Unwrap = errors.Unwrap
+	New    = errors.New
+)
 
-func NotFoundError(msg string) *ErrorResponse {
-	return &ErrorResponse{
-		StatusCode: http.StatusNotFound,
-		Err:        errors.New(msg),
-	}
-}
+var (
+	// Base Errors
 
-func InternalError(msg string) *ErrorResponse {
-	return &ErrorResponse{
-		StatusCode: http.StatusInternalServerError,
-		Err:        errors.New(msg),
-	}
-}
+	ErrBadRequest   = AddCodeWithMessage(nil, "bad_request", "bad request")
+	ErrUnauthorized = AddCodeWithMessage(nil, "unauthorized", "unauthorized")
 
-func BadRequest(msg string) *ErrorResponse {
-	return &ErrorResponse{
-		StatusCode: http.StatusBadRequest,
-		Err:        errors.New(msg),
-	}
-}
+	// Service
+
+	ErrNotFound            = AddCodeWithMessage(ErrBadRequest, "not_found", "not found")
+	ErrUserNotFound        = AddCodeWithMessage(ErrNotFound, "user_not_found", "user not found")
+	ErrTokenNotFound       = AddCodeWithMessage(ErrNotFound, "token_not_found", "token not found")
+	ErrAlreadyExists       = AddCodeWithMessage(ErrBadRequest, "already_exists", "already exists")
+	ErrInvalidID           = AddCodeWithMessage(ErrBadRequest, "invalid_id", "invalid ID")
+	ErrInvalidUserID       = AddCodeWithMessage(ErrInvalidID, "invalid_user_id", "invalid user ID")
+	ErrInvalidEmailID      = AddCodeWithMessage(ErrInvalidID, "invalid_email_id", "invalid email ID")
+	ErrInvalidPassword     = AddCodeWithMessage(ErrBadRequest, "invalid_password", "invalid password")
+	ErrInvalidEmailAddress = AddCodeWithMessage(ErrBadRequest, "invalid_email_address", "invalid email address")
+	ErrInvalidName         = AddCodeWithMessage(ErrBadRequest, "invalid_name", "invalid name")
+	ErrInvalidLimit        = AddCodeWithMessage(ErrBadRequest, "invalid_limit", "invalid limit")
+	ErrInvalidToken        = AddCodeWithMessage(ErrBadRequest, "invalid_token", "invalid token")
+
+	// Rest
+	ErrInvalidPayload = AddCodeWithMessage(ErrBadRequest, "invalid_payload", "invalid payload")
+)

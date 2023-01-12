@@ -17,7 +17,8 @@ func InitRoutes(service iface.Service, conf *conf.Configuration) *bunrouter.Comp
 		// add default error routes
 	).Compat()
 
-	h := handlers.New(service)
+	resp := new(DefaultResp)
+	h := handlers.New(service, resp)
 
 	r.POST("/login", h.Login)
 
