@@ -24,6 +24,7 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
+	"go.uber.org/zap"
 )
 
 type server struct {
@@ -45,13 +46,14 @@ func main() {
 	defer shutdown()
 	config := conf.LoadViperConfig()
 	db := database.InitDB(config)
+	logger, _ := zap.NewProduction()
 
 	io := io.New(database.New(db))
 	var tp *trace.TracerProvider
 	if config.Telemetry.Enabled {
 		tp, err := newTraceProvider(ctx, config.Telemetry)
 		if err != nil {
-			log.Fatal("Error converting the steps: ", err.Error())
+			logger.Fatal("Error converting the steps: " + err.Error())
 		}
 		io = telemetry.NewIO(io, tp)
 	}

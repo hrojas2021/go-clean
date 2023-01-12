@@ -1,3 +1,6 @@
+watch:
+	@go run github.com/rafaelsq/wtc
+
 docker-build:
 	docker build -t go-clean .
 

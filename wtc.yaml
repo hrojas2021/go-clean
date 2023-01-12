@@ -1,0 +1,31 @@
+debounce: 300
+ignore: \.git/
+trig_async:
+  - server
+format:
+  command_ok: "\u001b[38;5;240m[{{.Title}}] \u001b[0m{{.Message}}\n"
+  command_err: "\u001b[38;5;240m[{{.Title}}] \u001b[38;5;1m{{.Message}}\u001b[0m\n"
+
+rules:
+  - name: server
+    match: \.(go|yaml)$
+    ignore: (iface/|/entity/|_test\.go)
+    command: go run cmd/server/main.go
+
+  # - name: generate
+  #   match: /entity/|iface/
+  #   ignore: _gen\.go$|mock/
+  #   command: go generate {PKG}
+  #   debounce: 1000
+  #   trig_async:
+  #     - server
+
+  # - name: test
+  #   match: _test\.go$
+  #   command: go test -cover {PKG}
+
+  - name: lint
+    match: \.go$
+    ignore: (/mock/|_gen_?|(entity\.go)$)
+    command: go run github.com/golangci/golangci-lint/cmd/golangci-lint run {PKG}
+    debounce: 1000
