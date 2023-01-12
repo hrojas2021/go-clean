@@ -1,6 +1,9 @@
 watch:
 	@go run github.com/rafaelsq/wtc
 
+generate-mock:
+	go generate ./...
+
 docker-build:
 	docker build -t go-clean .
 

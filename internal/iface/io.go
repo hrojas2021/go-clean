@@ -1,3 +1,4 @@
+//go:generate go run github.com/golang/mock/mockgen -package=mock -source=$GOFILE -destination=mock/io.go
 package iface
 
 import (

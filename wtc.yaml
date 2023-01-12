@@ -12,13 +12,13 @@ rules:
     ignore: (iface/|/entity/|_test\.go)
     command: go run cmd/server/main.go
 
-  # - name: generate
-  #   match: /entity/|iface/
-  #   ignore: _gen\.go$|mock/
-  #   command: go generate {PKG}
-  #   debounce: 1000
-  #   trig_async:
-  #     - server
+  - name: generate
+    match: /entity/|iface/
+    ignore: _gen\.go$|mock/
+    command: go generate {PKG}
+    debounce: 1000
+    trig_async:
+      - server
 
   # - name: test
   #   match: _test\.go$
