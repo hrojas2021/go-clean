@@ -1,4 +1,4 @@
-watch:
+run:
 	@go run github.com/rafaelsq/wtc
 
 generate-mock:
