@@ -11,9 +11,9 @@ docker-run: docker-build
 	docker run -it --rm --name go-clean -p 9000:9000 go-clean 
 
 compose-down:
-	docker compose down
+	docker compose down --remove-orphans
 
-compose: compose-down
+compose:
 	docker compose up -d --build
 
 open-adminer:

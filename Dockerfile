@@ -17,5 +17,5 @@ FROM alpine
 COPY --from=build /app/main /app/main
 COPY --from=build /app/conf/config.yaml /app/config/
 
-EXPOSE 80
+EXPOSE 9000
 CMD /app/main

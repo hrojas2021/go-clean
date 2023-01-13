@@ -7,11 +7,12 @@ Add Errors package X
 
 Change Errros with Package
 Fix Middlewares - Fix SECRET in Middleware
-Add Gomock
+Add Gomock X
 Add GolangCi X
+Add unit Test with Gomock and DATADOG
 Try Chi?
 Add Better log
 #Add GitHub actions
-#Launch with Docker
+#Launch with Docker X
 #Add Fixtures
 #Try WTC X

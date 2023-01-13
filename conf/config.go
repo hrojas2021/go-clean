@@ -2,10 +2,7 @@ package conf
 
 import (
 	"log"
-	"os"
 
-	"github.com/joho/godotenv"
-	"github.com/kelseyhightower/envconfig"
 	"github.com/spf13/viper"
 )
 
@@ -41,33 +38,6 @@ type Configuration struct {
 	PORT      int `default:"9000"`
 	DB        DBConfiguration
 	Telemetry TelemetryConfiguration
-}
-
-func loadEnvironment(filename string) error {
-	var err error
-	if filename != "" {
-		err = godotenv.Load(filename)
-	} else {
-		err = godotenv.Load()
-
-		if os.IsNotExist(err) {
-			return nil
-		}
-	}
-	return err
-}
-
-func LoadConfig(filename string) *Configuration {
-	if err := loadEnvironment(filename); err != nil {
-		log.Fatalf("Failed to load configuration: %s", err)
-	}
-
-	config := new(Configuration)
-	if err := envconfig.Process("BF", config); err != nil {
-		log.Fatalf("Failed to process configuration: %s", err)
-	}
-
-	return config
 }
 
 func LoadViperConfig() *Configuration {

@@ -1,3 +1,4 @@
+version: "3.8"
 services:
   postgres:
     container_name: postgres
@@ -5,11 +6,13 @@ services:
     volumes: 
       - ../.project-data/postgresql:/var/lib/postgresql/data/
     environment:
-      POSTGRES_USER: 'root'
-      POSTGRES_PASSWORD: 'root'
-      POSTGRES_DB: 'go-clean'
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=root
+      - POSTGRES_DB=go-clean
     ports:
       - "5432:5432"
+    networks:
+      - internal
   adminer:
     image: adminer
     restart: always
@@ -23,9 +26,14 @@ services:
       - 9000:9000
     depends_on:
       - "postgres"
+    networks:
+      - internal
   jaeger:
     image: jaegertracing/opentelemetry-all-in-one
     ports:
       - 14268:14268
       - 16686:16686
+networks:
+  internal:
+    driver: bridge
   

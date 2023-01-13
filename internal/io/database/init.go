@@ -6,6 +6,7 @@ import (
 
 	"github.com/hugo.rojas/custom-api/conf"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 const dbType = "postgres"
@@ -25,7 +26,7 @@ func InitDB(config *conf.Configuration) *sqlx.DB {
 	}
 	err = db.Ping() // Err on docker?
 	if err != nil {
-		fmt.Println("ERROR")
+		log.Fatalf("Failed to ping DB via %s: %v", config.DB.URL, err)
 	}
 
 	db.SetMaxIdleConns(2)
