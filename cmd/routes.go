@@ -18,6 +18,8 @@ func main() {
 	r := httprouter.New()
 	r.HandleMethodNotAllowed = true
 	r.GET("/login", indexHandler) // path string, handle httprouter.Handle)
+	r.Handler("GET", "/api", http.HandlerFunc(handleIndex))
+	r.HandlerFunc("GET", "/api", handleIndex)
 
 	/*
 		r.Handle()                    // method string, path string, handle httprouter.Handle)
