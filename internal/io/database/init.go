@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/hugo.rojas/custom-api/conf"
 	"github.com/jmoiron/sqlx"
@@ -11,8 +12,13 @@ import (
 const dbType = "postgres"
 
 func InitDB(config *conf.Configuration) *sqlx.DB {
+	var host string = os.Getenv("DB_HOST")
+	if host == "" {
+		host = config.DB.HOST
+	}
+
 	dbConnection := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
-		config.DB.HOST,
+		host,
 		config.DB.USER,
 		config.DB.PASSWORD,
 		config.DB.NAME,
@@ -23,9 +29,9 @@ func InitDB(config *conf.Configuration) *sqlx.DB {
 	if err != nil {
 		log.Fatalf("Failed to open DB via %s: %v", config.DB.URL, err)
 	}
-	err = db.Ping() // Err on docker?
+	err = db.Ping()
 	if err != nil {
-		fmt.Println("ERROR")
+		log.Fatalf("Failed to ping DB via %s: %v", config.DB.URL, err)
 	}
 
 	db.SetMaxIdleConns(2)

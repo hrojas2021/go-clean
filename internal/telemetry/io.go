@@ -23,9 +23,23 @@ func NewIO(io iface.IO, tp trace.TracerProvider) iface.IO {
 	}
 }
 
-func (i *IO) GetCampaign(ctx context.Context, campaign *entities.Campaign) error {
-	ctx, span := otel.Tracer(i.name).Start(ctx, "GetCampaign")
+func (i *IO) SaveRoom(ctx context.Context, room *entities.Room) error {
+	ctx, span := otel.Tracer(i.name).Start(ctx, "SaveRoom")
 	defer span.End()
 
-	return i.io.GetCampaign(ctx, campaign)
+	return i.io.SaveRoom(ctx, room)
+}
+
+func (i *IO) FilterUsers(ctx context.Context) ([]entities.User, error) {
+	ctx, span := otel.Tracer(i.name).Start(ctx, "FilterUsers")
+	defer span.End()
+
+	return i.io.FilterUsers(ctx)
+}
+
+func (i *IO) LoginUser(ctx context.Context, user *entities.User) error {
+	ctx, span := otel.Tracer(i.name).Start(ctx, "LoginUser")
+	defer span.End()
+
+	return i.io.LoginUser(ctx, user)
 }

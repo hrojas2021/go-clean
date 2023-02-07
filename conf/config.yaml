@@ -1,6 +1,5 @@
 DB:
-  URL: "postgres://root:root@localhost:5432/go-clean?sslmode=disable"
-  HOST: "localhost"
+  HOST: "postgres"
   USER: "root"
   PASSWORD: "root"
   NAME: "go-clean"
@@ -10,7 +9,10 @@ DB:
 Telemetry:
   Enabled: true
   Name: "Default Project"
-  JaegerURL: "http://localhost:14268/api/traces"
+  JaegerURL: "http://127.0.0.1:14268/api/traces"
   Version: "1"
   Filepath: ""
-PORT: 9500
+JWT:
+  SECRET: "ZTP02X517M4PUND7"
+  EXPIRATION: 60 
+PORT: 9000

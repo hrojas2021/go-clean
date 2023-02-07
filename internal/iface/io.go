@@ -1,3 +1,4 @@
+//go:generate go run github.com/golang/mock/mockgen -package=mock -source=$GOFILE -destination=mock/io.go
 package iface
 
 import (
@@ -7,5 +8,7 @@ import (
 )
 
 type IO interface {
-	GetCampaign(ctx context.Context, campaign *entities.Campaign) error
+	FilterUsers(ctx context.Context) ([]entities.User, error)
+	LoginUser(ctx context.Context, user *entities.User) error
+	SaveRoom(ctx context.Context, room *entities.Room) error
 }

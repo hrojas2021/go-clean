@@ -1,13 +1,19 @@
+run:
+	@go run github.com/rafaelsq/wtc
+
+generate-mock:
+	go generate ./...
+
 docker-build:
 	docker build -t go-clean .
 
 docker-run: docker-build
-	docker run -it --rm --name go-clean -p 9500:9500 go-clean 
+	docker run -it --rm --name go-clean -p 9000:9000 go-clean 
 
 compose-down:
-	docker compose down
+	docker compose down --remove-orphans
 
-compose: compose-down
+compose:
 	docker compose up -d --build
 
 open-adminer:
@@ -21,3 +27,6 @@ add-migration:
 
 execute-migrations:
 	go run cmd/migrate/main.go $(args)
+
+linter:
+	go run github.com/golangci/golangci-lint/cmd/golangci-lint run ./...

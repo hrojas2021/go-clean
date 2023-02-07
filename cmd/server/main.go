@@ -24,6 +24,7 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
+	"go.uber.org/zap"
 )
 
 type server struct {
@@ -33,26 +34,26 @@ type server struct {
 func newServer(r *bunrouter.CompatRouter, h string) server {
 	return server{
 		srv: &http.Server{
-			Addr:    h,
-			Handler: r,
+			Addr:              h,
+			Handler:           r,
+			ReadHeaderTimeout: 3 * time.Second,
 		},
 	}
 }
 
 func main() {
-
 	ctx, shutdown := context.WithCancel(context.Background())
 	defer shutdown()
 	config := conf.LoadViperConfig()
 	db := database.InitDB(config)
+	logger, _ := zap.NewProduction()
 
 	io := io.New(database.New(db))
-
 	var tp *trace.TracerProvider
 	if config.Telemetry.Enabled {
 		tp, err := newTraceProvider(ctx, config.Telemetry)
 		if err != nil {
-			log.Fatal("Error converting the steps: ", err.Error())
+			logger.Fatal("Error converting the steps: " + err.Error())
 		}
 		io = telemetry.NewIO(io, tp)
 	}
@@ -62,14 +63,13 @@ func main() {
 		service = telemetry.NewService(service, tp)
 	}
 
-	r := rest.InitRoutes(service)
+	r := rest.InitRoutes(service, config)
 	addr := fmt.Sprintf("%v:%v", "", config.PORT)
 	srv := newServer(r, addr)
 	listenAndServe(ctx, &srv)
 }
 
 func listenAndServe(ctx context.Context, s *server) {
-
 	go func() {
 		if err := s.srv.ListenAndServe(); err != nil {
 			log.Fatal("listen: ", err)

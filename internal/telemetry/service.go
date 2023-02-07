@@ -3,8 +3,8 @@ package telemetry
 import (
 	"context"
 
-	"github.com/google/uuid"
 	"github.com/hugo.rojas/custom-api/internal/domain/entities"
+	"github.com/hugo.rojas/custom-api/internal/domain/models"
 	"github.com/hugo.rojas/custom-api/internal/iface"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
@@ -24,9 +24,23 @@ func NewService(service iface.Service, tp trace.TracerProvider) iface.Service {
 	}
 }
 
-func (s *Service) GetCampaign(ctx context.Context, campaignID uuid.UUID) (*entities.Campaign, error) {
-	ctx, span := otel.Tracer(s.name).Start(ctx, "GetCampaign")
+func (s *Service) SaveRoom(ctx context.Context, room models.Room) (entities.Room, error) {
+	ctx, span := otel.Tracer(s.name).Start(ctx, "SaveRoom")
 	defer span.End()
 
-	return s.service.GetCampaign(ctx, campaignID)
+	return s.service.SaveRoom(ctx, room)
+}
+
+func (s *Service) ListUser(ctx context.Context) ([]entities.User, error) {
+	ctx, span := otel.Tracer(s.name).Start(ctx, "ListUser")
+	defer span.End()
+
+	return s.service.ListUser(ctx)
+}
+
+func (s *Service) Login(ctx context.Context, user models.User) (*models.JWT, error) {
+	ctx, span := otel.Tracer(s.name).Start(ctx, "LoginUser")
+	defer span.End()
+
+	return s.service.Login(ctx, user)
 }
