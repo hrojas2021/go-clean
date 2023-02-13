@@ -13,6 +13,6 @@ Telemetry:
   Version: "1"
   Filepath: ""
 JWT:
-  SECRET: "ZTP02X517M4PUND7"
+  SECRET: ZTP02X517M4PUND7
   EXPIRATION: 60 
 PORT: 9000

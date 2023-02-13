@@ -24,6 +24,10 @@ func NewService(service iface.Service, tp trace.TracerProvider) iface.Service {
 	}
 }
 
+func (s *Service) GetSecret() []byte {
+	return s.service.GetSecret()
+}
+
 func (s *Service) SaveRoom(ctx context.Context, room models.Room) (entities.Room, error) {
 	ctx, span := otel.Tracer(s.name).Start(ctx, "SaveRoom")
 	defer span.End()

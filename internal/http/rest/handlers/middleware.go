@@ -1,4 +1,4 @@
-package middlewares
+package handlers
 
 import (
 	"errors"
@@ -10,9 +10,7 @@ import (
 
 const prefixLen = len("Bearer ")
 
-var SECRET = []byte("ZTP02X517M4PUND7") // FIX THIS
-
-func Authenticate(next bunrouter.HandlerFunc) bunrouter.HandlerFunc {
+func (h *Handle) Authenticate(next bunrouter.HandlerFunc) bunrouter.HandlerFunc {
 	return func(w http.ResponseWriter, req bunrouter.Request) error {
 		var rawJWT string
 		if raw := req.Header.Get("Authorization"); len(raw) > prefixLen {
@@ -24,7 +22,7 @@ func Authenticate(next bunrouter.HandlerFunc) bunrouter.HandlerFunc {
 					w.WriteHeader(http.StatusUnauthorized)
 					w.Write([]byte("not authorized")) //nolint:errcheck // error response
 				}
-				return SECRET, nil
+				return h.service.GetSecret(), nil
 			})
 
 			if err != nil {
