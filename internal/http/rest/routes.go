@@ -16,6 +16,7 @@ func InitRoutes(service iface.Service, conf *conf.Configuration) *bunrouter.Comp
 	// https://bunrouter.uptrace.dev/guide/golang-router.html#installation
 	r := bunrouter.New(
 		bunrouter.Use(reqlog.NewMiddleware()),
+		bunrouter.Use(handlers.CorsMiddleware),
 		// add default error routes
 	).Compat()
 
