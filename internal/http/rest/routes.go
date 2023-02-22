@@ -17,7 +17,6 @@ func InitRoutes(service iface.Service, conf *conf.Configuration) *bunrouter.Comp
 	r := bunrouter.New(
 		bunrouter.Use(reqlog.NewMiddleware()),
 		bunrouter.Use(handlers.CorsMiddleware),
-		// add default error routes
 	).Compat()
 
 	resp := new(DefaultResp)

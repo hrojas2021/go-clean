@@ -43,6 +43,7 @@ type Configuration struct {
 func LoadViperConfig() *Configuration {
 	viper.SetConfigName("config")
 	viper.AddConfigPath("./conf")
+	viper.AddConfigPath("../conf")
 	viper.AddConfigPath("/app/config")
 	viper.SetConfigType("yaml")
 	var configuration Configuration
