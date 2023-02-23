@@ -2,7 +2,9 @@ package integration
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/federicoleon/go-httpclient/gohttp"
 	"github.com/hugo.rojas/custom-api/conf"
 	"github.com/hugo.rojas/custom-api/internal/domain/models"
 	"github.com/hugo.rojas/custom-api/internal/iface"
@@ -11,34 +13,42 @@ import (
 	"github.com/hugo.rojas/custom-api/internal/service"
 )
 
+type Fixtures struct {
+	srv iface.Service
+}
+
 var (
-	fixture iface.Service
-	token   string
-	ctx     = context.Background()
+	token      string
+	httpClient gohttp.Client
+	ctx        = context.Background()
+	localURL   string
+	fixtures   Fixtures
 )
 
 func init() {
 	cf := conf.LoadViperConfig()
 	db := database.InitDB(cf)
 	io := io.New(database.New(db))
-	fixture = service.New(cf, io)
-	token = getToken()
+	localURL = fmt.Sprintf("http://localhost:%d", cf.PORT)
+	fixtures.srv = service.New(cf, io)
+	token = fixtures.getToken()
+	httpClient = getHTTPClient(token)
 }
 
-func createGenericRoom(name string) (*models.Room, error) {
+func (f *Fixtures) createGenericRoom(name string) (*models.Room, error) {
 	r := &models.Room{
 		Name: name,
 	}
 
-	err := fixture.SaveRoom(ctx, r)
+	err := f.srv.SaveRoom(ctx, r)
 	return r, err
 }
 
-func getToken() string {
+func (f *Fixtures) getToken() string {
 	user := models.User{
 		Username: "hrojas",
 		Password: "12345",
 	}
-	t, _ := fixture.Login(ctx, user)
+	t, _ := f.srv.Login(ctx, user)
 	return t.Token
 }
