@@ -31,5 +31,5 @@ execute-migrations:
 linter:
 	go run github.com/golangci/golangci-lint/cmd/golangci-lint run ./...
 
-run-integration-tests:
+run-local-integration-tests:
 	 go test -cover  -v -race  ./integration/...

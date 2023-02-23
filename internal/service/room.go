@@ -7,14 +7,18 @@ import (
 	"github.com/hugo.rojas/custom-api/internal/domain/models"
 )
 
-func (s *Service) SaveRoom(ctx context.Context, room models.Room) (entities.Room, error) {
-	r := &entities.Room{
+func (s *Service) SaveRoom(ctx context.Context, room *models.Room) error {
+	rDb := &entities.Room{
 		Name: room.Name,
 	}
 
-	err := s.io.SaveRoom(ctx, r)
+	err := s.io.SaveRoom(ctx, rDb)
 	if err != nil {
-		return entities.Room{}, err
+		return err
 	}
-	return *r, nil
+	room.ID = rDb.ID
+	room.CreatedAt = rDb.CreatedAt
+	room.UpdatedAt = rDb.UpdatedAt
+
+	return nil
 }

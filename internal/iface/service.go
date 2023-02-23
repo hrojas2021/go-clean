@@ -13,5 +13,5 @@ type Service interface {
 	GetSecret() []byte
 	ListUser(ctx context.Context) ([]entities.User, error)
 
-	SaveRoom(ctx context.Context, room models.Room) (entities.Room, error)
+	SaveRoom(ctx context.Context, room *models.Room) error
 }

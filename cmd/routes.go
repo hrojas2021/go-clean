@@ -1,5 +1,6 @@
 package main
 
+//REMOVE THIS FILE
 import (
 	"net/http"
 
