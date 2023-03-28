@@ -31,10 +31,9 @@ func (d *Database) createRoom(room *entities.Room) error {
 		return err
 	}
 
-	if err == nil {
-		room.CreatedAt = now
-		room.UpdatedAt = now
-		room.ID = ID
-	}
+	room.CreatedAt = now
+	room.UpdatedAt = now
+	room.ID = ID
+
 	return nil
 }
