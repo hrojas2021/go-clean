@@ -6,6 +6,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/uptrace/bunrouter"
+	"go.opentelemetry.io/otel"
 )
 
 const prefixLen = len("Bearer ")
@@ -63,16 +64,13 @@ func CorsMiddleware(next bunrouter.HandlerFunc) bunrouter.HandlerFunc {
 	}
 }
 
-// func Telemetry(next bunrouter.HandlerFunc) bunrouter.HandlerFunc {
-// 	return func(w http.ResponseWriter, req bunrouter.Request) error {
-// 		spanHandler := func(w http.ResponseWriter, r *http.Request) {
-// 			traceID := trace.SpanFromContext(r.Context()).SpanContext().TraceID().String()
+func Telemetry(next bunrouter.HandlerFunc) bunrouter.HandlerFunc {
+	return func(w http.ResponseWriter, req bunrouter.Request) error {
+		ctx, span := otel.Tracer("request").Start(req.Context(), "handle "+req.Method+" "+req.URL.Path)
+		defer span.End()
+		// otel.GetTracerProvider()
 
-// 			// add trace id to the http response
-// 			w.Header().Add("Trace-ID", traceID)
-
-// 			next.ServeHTTP(w, r)
-// 		}
-// 		return otelhttp.NewHandler(http.HandlerFunc(spanHandler), "request")
-// 	}
-// }
+		req = req.WithContext(ctx)
+		return next(w, req)
+	}
+}

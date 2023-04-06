@@ -13,7 +13,6 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
-	"github.com/hugo.rojas/custom-api/conf"
 	"github.com/hugo.rojas/custom-api/internal/domain/models"
 	"github.com/hugo.rojas/custom-api/internal/http/rest"
 	"github.com/hugo.rojas/custom-api/internal/http/rest/handlers"
@@ -34,6 +33,7 @@ func TestCreateRoom(t *testing.T) {
 
 	t.Run("Success request", func(t *testing.T) {
 		// initialize
+		t.Parallel()
 		m := mock.NewMockService(ctrl)
 
 		// expect mock call
@@ -47,7 +47,7 @@ func TestCreateRoom(t *testing.T) {
 			})
 
 		// config router
-		r := rest.InitRoutes(m, &conf.Configuration{})
+		r := rest.InitRoutes(m)
 		h := handlers.New(m, new(rest.DefaultResp))
 		r.POST("/", h.SaveRoom)
 
@@ -71,9 +71,10 @@ func TestCreateRoom(t *testing.T) {
 	})
 
 	t.Run("Payload error", func(t *testing.T) {
+		t.Parallel()
 		m := mock.NewMockService(ctrl)
 
-		r := rest.InitRoutes(m, &conf.Configuration{})
+		r := rest.InitRoutes(m)
 		h := handlers.New(m, new(rest.DefaultResp))
 		r.POST("/", h.SaveRoom)
 
@@ -98,9 +99,10 @@ func TestCreateRoom(t *testing.T) {
 	})
 
 	t.Run("Invalid payload", func(t *testing.T) {
+		t.Parallel()
 		m := mock.NewMockService(ctrl)
 
-		r := rest.InitRoutes(m, &conf.Configuration{})
+		r := rest.InitRoutes(m)
 		h := handlers.New(m, new(rest.DefaultResp))
 		r.POST("/", h.SaveRoom)
 
@@ -113,8 +115,8 @@ func TestCreateRoom(t *testing.T) {
 		require.Nil(t, err)
 		assert.Equal(t, http.StatusBadRequest, res.StatusCode)
 		var resp struct {
-			rest.ErrResponse
 			Room models.Room
+			rest.ErrResponse
 		}
 		require.Nil(t, json.NewDecoder(res.Body).Decode(&resp))
 		res.Body.Close()
@@ -124,12 +126,13 @@ func TestCreateRoom(t *testing.T) {
 	})
 
 	t.Run("Service error", func(t *testing.T) {
+		t.Parallel()
 		m := mock.NewMockService(ctrl)
 
 		m.EXPECT().SaveRoom(gomock.Any(), gomock.Any()).
 			Return(errInternalTestError)
 
-		r := rest.InitRoutes(m, nil)
+		r := rest.InitRoutes(m)
 		h := handlers.New(m, new(rest.DefaultResp))
 		r.POST("/", h.SaveRoom)
 
@@ -151,5 +154,9 @@ func TestCreateRoom(t *testing.T) {
 
 		assert.Empty(t, resp.Room)
 		assert.Equal(t, "could not save the room; internal test error", resp.Error.Msg)
+	})
+
+	t.Cleanup(func() {
+		//nothing to clean up
 	})
 }

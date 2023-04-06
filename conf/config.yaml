@@ -8,7 +8,7 @@ DB:
 
 Telemetry:
   Enabled: true
-  Name: "Default Project"
+  Name: "Boilerplate Project"
   JaegerURL: "http://127.0.0.1:14268/api/traces"
   Version: "1"
   Filepath: ""
