@@ -20,9 +20,10 @@ rules:
     trig_async:
       - server
 
-  # - name: test
-  #   match: _test\.go$
-  #   command: go test -cover {PKG}
+  - name: test
+    match: _test\.go$
+    ignore: (integration/)
+    command: go test -v -race -cover {PKG}
 
   - name: lint
     match: \.go$

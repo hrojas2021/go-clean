@@ -16,6 +16,10 @@ func (s *Service) ListUser(ctx context.Context) ([]entities.User, error) {
 	return s.io.FilterUsers(ctx)
 }
 
+func (s *Service) GetSecret() []byte {
+	return []byte(s.config.JWT.SECRET)
+}
+
 func (s *Service) Login(ctx context.Context, user models.User) (*models.JWT, error) {
 	userEntity := &entities.User{
 		Username: user.Username,

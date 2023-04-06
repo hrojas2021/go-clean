@@ -9,8 +9,9 @@ import (
 )
 
 type Service interface {
-	ListUser(ctx context.Context) ([]entities.User, error)
 	Login(context.Context, models.User) (*models.JWT, error)
+	GetSecret() []byte
+	ListUser(ctx context.Context) ([]entities.User, error)
 
-	SaveRoom(ctx context.Context, room models.Room) (entities.Room, error)
+	SaveRoom(ctx context.Context, room *models.Room) error
 }

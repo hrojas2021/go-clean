@@ -63,7 +63,7 @@ func main() {
 		service = telemetry.NewService(service, tp)
 	}
 
-	r := rest.InitRoutes(service, config)
+	r := rest.InitRoutes(service)
 	addr := fmt.Sprintf("%v:%v", "", config.PORT)
 	srv := newServer(r, addr)
 	listenAndServe(ctx, &srv)
@@ -124,10 +124,12 @@ func newTraceProvider(ctx context.Context, cfgTelemetry conf.TelemetryConfigurat
 		}
 	}
 
-	re := resource.NewWithAttributes(
-		semconv.SchemaURL,
-		semconv.ServiceNameKey.String(cfgTelemetry.Name),
-		attribute.String("version", cfgTelemetry.Version),
+	re, _ := resource.New(
+		context.Background(),
+		resource.WithAttributes(
+			semconv.ServiceNameKey.String(cfgTelemetry.Name),
+			attribute.String("version", cfgTelemetry.Version),
+		),
 	)
 
 	tp := trace.NewTracerProvider(

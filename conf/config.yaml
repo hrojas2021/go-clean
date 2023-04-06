@@ -8,11 +8,11 @@ DB:
 
 Telemetry:
   Enabled: true
-  Name: "Default Project"
+  Name: "Boilerplate Project"
   JaegerURL: "http://127.0.0.1:14268/api/traces"
   Version: "1"
   Filepath: ""
 JWT:
-  SECRET: "ZTP02X517M4PUND7"
+  SECRET: ZTP02X517M4PUND7
   EXPIRATION: 60 
 PORT: 9000

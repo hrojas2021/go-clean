@@ -36,6 +36,20 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 	return m.recorder
 }
 
+// GetSecret mocks base method.
+func (m *MockService) GetSecret() []byte {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSecret")
+	ret0, _ := ret[0].([]byte)
+	return ret0
+}
+
+// GetSecret indicates an expected call of GetSecret.
+func (mr *MockServiceMockRecorder) GetSecret() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSecret", reflect.TypeOf((*MockService)(nil).GetSecret))
+}
+
 // ListUser mocks base method.
 func (m *MockService) ListUser(ctx context.Context) ([]entities.User, error) {
 	m.ctrl.T.Helper()
@@ -67,12 +81,11 @@ func (mr *MockServiceMockRecorder) Login(arg0, arg1 interface{}) *gomock.Call {
 }
 
 // SaveRoom mocks base method.
-func (m *MockService) SaveRoom(ctx context.Context, room models.Room) (entities.Room, error) {
+func (m *MockService) SaveRoom(ctx context.Context, room *models.Room) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SaveRoom", ctx, room)
-	ret0, _ := ret[0].(entities.Room)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // SaveRoom indicates an expected call of SaveRoom.

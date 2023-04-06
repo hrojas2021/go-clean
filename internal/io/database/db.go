@@ -38,7 +38,7 @@ func (d *Database) Filter(ctx context.Context, query, defaultFields string, limi
 	}
 
 	var after string
-	if len(args.Join) > 0 {
+	if len(args.Where) > 0 {
 		after += fmt.Sprintf(" WHERE %s", strings.Join(args.Where, " AND "))
 	}
 
@@ -78,8 +78,9 @@ func (d *Database) Filter(ctx context.Context, query, defaultFields string, limi
 		errs <- err
 	}()
 
+	concQuery := fmt.Sprintf(queryWithFields, strings.Join(args.Fields, ", "), after)
 	go func() {
-		errs <- d.Select(ctx, dest, fmt.Sprintf(queryWithFields, strings.Join(args.Fields, ", "), after), args.Args...)
+		errs <- d.Select(ctx, dest, concQuery, args.Args...)
 	}()
 
 	if err := <-errs; err != nil {

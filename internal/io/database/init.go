@@ -12,7 +12,7 @@ import (
 const dbType = "postgres"
 
 func InitDB(config *conf.Configuration) *sqlx.DB {
-	var host string = os.Getenv("DB_HOST")
+	host := os.Getenv("DB_HOST")
 	if host == "" {
 		host = config.DB.HOST
 	}
