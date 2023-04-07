@@ -86,7 +86,6 @@ func TestCreateRoom(t *testing.T) {
 		require.Error(t, err)
 		assert.Equal(t, "could not create room; 0 rows affected", err.Error())
 	})
-
 }
 
 type MockResult struct {
