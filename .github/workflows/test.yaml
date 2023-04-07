@@ -36,4 +36,4 @@ jobs:
                 cache: true
             - name: Test in docker container
               run: |
-                docker-compose -f docker-composeci.yml up --build -d && \
+                docker-compose -f docker-composeci.yml up --build -d
