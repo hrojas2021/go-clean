@@ -63,5 +63,6 @@ func (f *Fixtures) getToken(secret string) string {
 		return ""
 	}
 
+	fmt.Println("TOKEN", tokenStr)
 	return tokenStr
 }
