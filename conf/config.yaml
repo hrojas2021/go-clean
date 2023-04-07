@@ -1,5 +1,5 @@
 DB:
-  HOST: "localhost"
+  HOST: "postgres"
   USER: "root"
   PASSWORD: "root"
   NAME: "go-clean"
