@@ -18,7 +18,7 @@ services:
       - "5432:5432"
     networks:
       - internal
-  go:
+  app:
     container_name: accounts
     build:
       context: .
