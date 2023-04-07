@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 services:
   postgres:
     container_name: postgres
@@ -25,7 +25,7 @@ services:
     ports:
       - 9000:9000
     environment:
-      DB_HOST=localhost
+      DB_HOST: localhost
     depends_on:
       postgres:
         condition: service_healthy
