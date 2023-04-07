@@ -10,5 +10,4 @@
 
 #AddRedis 5
 #Add GitHub actions 5
-#Add Kafka 5
 #Add professional README 5
