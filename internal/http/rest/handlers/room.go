@@ -3,14 +3,13 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
-	"strings"
 
 	"github.com/hugo.rojas/custom-api/internal/domain/models"
 	"github.com/hugo.rojas/custom-api/internal/errors"
 )
 
 type payload struct {
-	Name string `json:"name"`
+	Name string `json:"name" validate:"required,min=3,max=100"`
 }
 
 func (h *Handle) SaveRoom(w http.ResponseWriter, req *http.Request) {
@@ -21,7 +20,7 @@ func (h *Handle) SaveRoom(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if len(strings.TrimSpace(payload.Name)) == 0 {
+	if err := h.validate.StructCtx(req.Context(), &payload); err != nil {
 		h.resp.Failf(w, req, "the params are invalid; %w", errors.ErrInvalidPayload)
 		return
 	}
