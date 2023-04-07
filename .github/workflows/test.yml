@@ -1,8 +1,8 @@
 name: tests
 on: [push, pull_request]
 jobs:
-    build:
-        name: Build
+    build-and-run:
+        name: Run linter and test
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -16,4 +16,9 @@ jobs:
             - name: golangci-lint
               run: go run github.com/golangci/golangci-lint/cmd/golangci-lint run ./...
             - name: Test
-              run: go test -race -cover ./internal/...
+              run: go test -json ./internal/... > test.json
+            - name: Annotate tests
+              if: always()
+              uses: guyarb/golang-test-annotations@v0.5.1
+              with:
+                test-results: test.json
