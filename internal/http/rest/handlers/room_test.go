@@ -11,6 +11,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/go-playground/validator"
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/hugo.rojas/custom-api/internal/domain/models"
@@ -30,6 +31,7 @@ func TestCreateRoom(t *testing.T) {
 	now := time.Now()
 	fakeRoom := &models.Room{Name: "Fake Room"}
 	errInternalTestError := errors.New("internal test error")
+	v := validator.New()
 
 	t.Run("Success request", func(t *testing.T) {
 		// initialize
@@ -48,7 +50,7 @@ func TestCreateRoom(t *testing.T) {
 
 		// config router
 		r := rest.InitRoutes(m)
-		h := handlers.New(m, new(rest.DefaultResp))
+		h := handlers.New(m, new(rest.DefaultResp), v)
 		r.POST("/", h.SaveRoom)
 
 		// test server
@@ -75,7 +77,7 @@ func TestCreateRoom(t *testing.T) {
 		m := mock.NewMockService(ctrl)
 
 		r := rest.InitRoutes(m)
-		h := handlers.New(m, new(rest.DefaultResp))
+		h := handlers.New(m, new(rest.DefaultResp), v)
 		r.POST("/", h.SaveRoom)
 
 		ts := httptest.NewServer(r)
@@ -103,7 +105,7 @@ func TestCreateRoom(t *testing.T) {
 		m := mock.NewMockService(ctrl)
 
 		r := rest.InitRoutes(m)
-		h := handlers.New(m, new(rest.DefaultResp))
+		h := handlers.New(m, new(rest.DefaultResp), v)
 		r.POST("/", h.SaveRoom)
 
 		ts := httptest.NewServer(r)
@@ -133,7 +135,7 @@ func TestCreateRoom(t *testing.T) {
 			Return(errInternalTestError)
 
 		r := rest.InitRoutes(m)
-		h := handlers.New(m, new(rest.DefaultResp))
+		h := handlers.New(m, new(rest.DefaultResp), v)
 		r.POST("/", h.SaveRoom)
 
 		ts := httptest.NewServer(r)

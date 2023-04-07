@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-playground/validator"
 	"github.com/hugo.rojas/custom-api/internal/http/rest/handlers"
 	"github.com/hugo.rojas/custom-api/internal/iface"
 	"github.com/uptrace/bunrouter"
@@ -22,7 +23,8 @@ func InitRoutes(service iface.Service) *bunrouter.CompatRouter {
 	).Compat()
 
 	resp := new(DefaultResp)
-	h := handlers.New(service, resp)
+	v := validator.New()
+	h := handlers.New(service, resp, v)
 
 	r.GET("/", func(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, "API - Running OK")
