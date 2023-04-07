@@ -78,8 +78,7 @@ func listenAndServe(ctx context.Context, s *server) {
 
 	log.Printf("server listening on address %s\n", s.srv.Addr)
 
-	// Wait for interrupt signal to gracefully shutdown the server with
-	// a timeout of 5 seconds.
+	// Wait for interrupt signal to gracefully shutdown the server with a timeout of 5 seconds.
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
