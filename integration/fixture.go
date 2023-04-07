@@ -30,6 +30,7 @@ func init() {
 	db := database.InitDB(cf)
 	io := io.New(database.New(db))
 	localURL = fmt.Sprintf("http://localhost:%d", cf.PORT)
+	fmt.Printf("\n\n%+v\n\n", cf)
 	fixtures.srv = service.New(cf, io)
 	token = fixtures.getToken()
 	httpClient = getHTTPClient(token)
@@ -49,7 +50,7 @@ func (f *Fixtures) getToken() string {
 		Username: "hrojas",
 		Password: "12345",
 	}
-	fmt.Println(f)
+	fmt.Println(f.srv)
 	t, _ := f.srv.Login(ctx, user)
 	return t.Token
 }
