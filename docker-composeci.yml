@@ -24,6 +24,8 @@ services:
       context: .
     ports:
       - 9000:9000
+    environment:
+      DB_HOST=localhost
     depends_on:
       postgres:
         condition: service_healthy
