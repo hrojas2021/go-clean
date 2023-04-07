@@ -37,4 +37,5 @@ jobs:
             - name: Test in docker container
               run: |
                 docker-compose -f docker-composeci.yml up --build -d && \
+                echo printenv
                 go run cmd/migrate/main.go up
