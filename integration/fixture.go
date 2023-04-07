@@ -50,7 +50,10 @@ func (f *Fixtures) getToken() string {
 		Username: "hrojas",
 		Password: "12345",
 	}
-	fmt.Println(f.srv)
-	t, _ := f.srv.Login(ctx, user)
+	t, err := f.srv.Login(ctx, user)
+	if err != nil {
+		fmt.Println("ERROR: ", err.Error())
+		return ""
+	}
 	return t.Token
 }
