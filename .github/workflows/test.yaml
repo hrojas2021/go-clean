@@ -39,4 +39,5 @@ jobs:
                 export DB_HOST=localhost && \
                 docker-compose -f docker-composeci.yml up --build -d && \
                 echo "Running DB migration" && \
-                go run cmd/migrate/main.go up
+                go run cmd/migrate/main.go up && \
+                go test -cover  -v -race  ./integration/...
