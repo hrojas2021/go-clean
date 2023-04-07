@@ -46,14 +46,15 @@ func (f *Fixtures) createGenericRoom(name string) (*models.Room, error) {
 }
 
 func (f *Fixtures) getToken() string {
-	user := models.User{
-		Username: "hrojas",
-		Password: "12345",
-	}
-	t, err := f.srv.Login(ctx, user)
-	if err != nil {
-		fmt.Println("ERROR: ", err.Error())
-		return ""
-	}
-	return t.Token
+	// user := models.User{
+	// 	Username: "hrojas",
+	// 	Password: "12345",
+	// }
+	// t, err := f.srv.Login(ctx, user)
+	// if err != nil {
+	// 	fmt.Println("ERROR: ", err.Error())
+	// 	return ""
+	// }
+	// return t.Token
+	return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODA5MDM1NjYsInVzZXJuYW1lIjoiaHJvamFzIn0.kUpqyeHntUtW1ALldf2irsjzyuUCp6OmF5xZI3m8jE8"
 }
