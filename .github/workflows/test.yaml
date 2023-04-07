@@ -36,6 +36,7 @@ jobs:
                 cache: true
             - name: Test in docker container
               run: |
-                export DB_HOST=localhost
+                export DB_HOST=localhost && \
                 docker-compose -f docker-composeci.yml up --build -d && \
-                go run cmd/migrate/main.go up
+                echo "Running DB migration" && \
+                go run cmd/migrate/main.go up && \
