@@ -23,7 +23,7 @@ jobs:
               with:
                 test-results: test.json
     run-integration-test:
-        name: Run linter and test
+        name: Run integration test
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -36,6 +36,6 @@ jobs:
                 cache: true
             - name: Test
               run: |
-                docker-compose -f docker-composeci.yml up -d && \
+                docker-compose -f docker-composeci.yml up --build -d && \
                 go test -cover  -v -race  ./integration/...
 
