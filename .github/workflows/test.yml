@@ -22,3 +22,20 @@ jobs:
               uses: guyarb/golang-test-annotations@v0.5.1
               with:
                 test-results: test.json
+    run-integration-test:
+        name: Run linter and test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Go
+              uses: actions/setup-go@v3
+              with:
+                go-version: '1.19'
+                check-latest: true
+                cache: true
+            - name: Test
+              run: |
+                docker-compose -f docker-composeci.yml up -d && \
+                go test -cover  -v -race  ./integration/...
+
