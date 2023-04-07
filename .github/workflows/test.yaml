@@ -2,7 +2,7 @@ name: Test checker
 on: [push, pull_request]
 jobs:
     build-and-run:
-        name: Run linter and test
+        name: Run linter and unit tests
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -23,7 +23,7 @@ jobs:
               with:
                 test-results: test.json
     run-integration-test:
-        name: Run integration test
+        name: Run integration tests
         runs-on: ubuntu-latest
         steps:
             - name: Checkout

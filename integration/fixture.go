@@ -49,6 +49,7 @@ func (f *Fixtures) getToken() string {
 		Username: "hrojas",
 		Password: "12345",
 	}
+	fmt.Println(f)
 	t, _ := f.srv.Login(ctx, user)
 	return t.Token
 }
