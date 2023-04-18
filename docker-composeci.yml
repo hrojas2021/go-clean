@@ -1,10 +1,8 @@
-version: "3.9"
+version: "3.8"
 services:
   postgres:
     container_name: postgres
     image: postgres:latest
-    volumes: 
-      - ../.project-data/postgresql:/var/lib/postgresql/data/
     environment:
       - POSTGRES_PASSWORD=root
       - POSTGRES_USER=root
@@ -18,14 +16,12 @@ services:
       - "5432:5432"
     networks:
       - internal
-  app:
+  go:
     container_name: accounts
     build:
       context: .
     ports:
       - 9000:9000
-    environment:
-      DB_HOST: localhost
     depends_on:
       postgres:
         condition: service_healthy
