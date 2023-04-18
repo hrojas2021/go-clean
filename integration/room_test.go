@@ -14,5 +14,5 @@ func TestCreateRoom(t *testing.T) {
 	r, err := fixtures.createGenericRoom("Gamers-Online")
 	require.NoError(t, err)
 	require.NotEmpty(t, r.Name)
-	require.Equal(t, r.Name, "Gamers-Online")
+	require.Equal(t, r.Name, "Gamers-OnlineQ")
 }
