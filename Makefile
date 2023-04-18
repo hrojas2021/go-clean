@@ -38,4 +38,4 @@ run-in-pipeline:
 	export DB_HOST=localhost && docker-compose -f docker-composeci.yml up --build -d && \
 	docker ps -a && echo "running migrations" && go run cmd/migrate/main.go up && \
 	go clean -testcache && \
-	go test -cover  -v -race  ./integration/...
+	go test -cover  -v -race  ./integration/... && docker-compose down --volumes --remove-orphans
