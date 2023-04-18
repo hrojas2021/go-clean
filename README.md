@@ -1,7 +1,7 @@
 // Required to start:
 // export DB_HOST = "localhost locally
 // Set config.yaml
-// Run migrations
+// Run migrations args=up
 
 #Change Errros with Packages X
 #Change router 2 -> Check and remove
