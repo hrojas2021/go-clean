@@ -1,5 +1,5 @@
 // Required to start:
-// export DB_HOST = "localhost" locally
+// export DB_HOST = "localhost"
 // Set config.yaml
 // Run migrations args=up
 
