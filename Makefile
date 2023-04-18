@@ -35,7 +35,7 @@ run-local-integration-tests:
 	 go clean -testcache && go test -cover -v -race ./integration/...
 
 run-in-pipeline:
-	@ DB_HOST=localhost docker-compose -f docker-compose.yml up --build -d && \
+	docker-compose -f docker-compose.yml up --build -d && \
 	docker ps -a && echo "running migrations" && go run cmd/migrate/main.go up && \
 	go clean -testcache && \
 	go test -cover  -v -race  ./integration/...
