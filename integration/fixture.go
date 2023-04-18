@@ -31,7 +31,7 @@ func init() {
 	cf := conf.LoadViperConfig()
 	db := database.InitDB(cf)
 	io := io.New(database.New(db))
-	localURL = fmt.Sprintf("http://localhost:%d", cf.PORT)
+	localURL = fmt.Sprintf("http://0.0.0.0:%d", cf.PORT)
 	fmt.Printf("\n\n%+v\n\n", cf)
 	fixtures.srv = service.New(cf, io)
 	token = fixtures.getToken(cf.JWT.SECRET)
@@ -63,6 +63,5 @@ func (f *Fixtures) getToken(secret string) string {
 		return ""
 	}
 
-	fmt.Println("TOKEN", len(tokenStr))
 	return tokenStr
 }
