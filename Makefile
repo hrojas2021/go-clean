@@ -34,8 +34,6 @@ linter:
 run-local-integration-tests:
 	 go clean -testcache && go test -cover -v -race ./integration/...
 
-clean-and-run: compose-down run-in-pipeline
-
 run-in-pipeline:
 	export DB_HOST=localhost && docker-compose -f docker-composeci.yml up --build -d && \
 	docker ps -a && echo "running migrations" && go run cmd/migrate/main.go up && \
