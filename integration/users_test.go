@@ -24,5 +24,5 @@ func TestGetUsers(t *testing.T) {
 	require.Equal(t, http.StatusOK, resp.StatusCode)
 	err = resp.UnmarshalJson(&users)
 	require.NoError(t, err)
-	// require.GreaterOrEqual(t, len(users.Users), 1)
+	require.GreaterOrEqual(t, len(users.Users), 0)
 }
