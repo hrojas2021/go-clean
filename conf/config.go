@@ -9,12 +9,12 @@ import (
 // DBConfiguration holds all the database related configuration.
 type DBConfiguration struct {
 	URL      string
-	HOST     string
-	PORT     string
-	USER     string
-	PASSWORD string
-	NAME     string
-	SSL      string
+	Host     string
+	Port     string
+	User     string
+	Password string
+	Name     string
+	Ssl      string
 }
 
 // Configuration holds all openTelemetry configuration
@@ -27,9 +27,9 @@ type TelemetryConfiguration struct {
 }
 
 // Configuration holds all jwt configuration
-type SecuriyConfiguration struct {
-	SECRET     string
-	EXPIRATION int
+type SecurityConfiguration struct {
+	Secret     string
+	Expiration int
 }
 
 // JobsConfiguration holds all jobs tasks configuration
@@ -51,14 +51,14 @@ type LoggerConfiguration struct {
 
 // Configuration holds all configuration for this project
 type Configuration struct {
-	JWT            SecuriyConfiguration
-	PORT           int `default:"9000"`
-	DB             DBConfiguration
-	LOGGER         LoggerConfiguration
-	SERVER_TIMEOUT int
-	Jobs           JobsConfiguration
-	Telemetry      TelemetryConfiguration
-	IS_PRODUCTION  bool
+	Jwt           SecurityConfiguration
+	Port          int `default:"9000"`
+	DB            DBConfiguration
+	Logger        LoggerConfiguration
+	ServerTimeout int
+	Jobs          JobsConfiguration
+	Telemetry     TelemetryConfiguration
+	IsProduction  bool
 }
 
 func LoadViperConfig() *Configuration {

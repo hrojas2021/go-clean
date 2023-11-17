@@ -53,13 +53,13 @@ func main() {
 	config := conf.LoadViperConfig()
 	loggerConfig := zap.NewDevelopmentConfig()
 
-	if config.IS_PRODUCTION {
+	if config.IsProduction {
 		loggerConfig = zap.NewProductionConfig()
-		loggerConfig.OutputPaths = []string{config.LOGGER.OutputPath}
-		loggerConfig.ErrorOutputPaths = []string{config.LOGGER.ErrOutputPath}
+		loggerConfig.OutputPaths = []string{config.Logger.OutputPath}
+		loggerConfig.ErrorOutputPaths = []string{config.Logger.ErrOutputPath}
 	}
 
-	logger := logger.NewZapLogger(&config.LOGGER, loggerConfig, !config.IS_PRODUCTION)
+	logger := logger.NewZapLogger(&config.Logger, loggerConfig, !config.IsProduction)
 	defer func() {
 		if err := logger.Sync(); err != nil {
 			panic(err)
@@ -86,8 +86,8 @@ func main() {
 	jobs.InitJobsQueue(*config, logger.Named(asyncJobs), service)
 
 	r := rest.InitRoutes(service)
-	addr := fmt.Sprintf("%v:%v", "", config.PORT)
-	srv := newServer(r, addr, config.SERVER_TIMEOUT)
+	addr := fmt.Sprintf("%v:%v", "", config.Port)
+	srv := newServer(r, addr, config.ServerTimeout)
 	listenAndServe(ctx, &srv)
 }
 
