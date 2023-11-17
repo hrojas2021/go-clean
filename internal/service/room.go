@@ -8,17 +8,17 @@ import (
 )
 
 func (s *Service) SaveRoom(ctx context.Context, room *models.Room) error {
-	rDb := &entities.Room{
+	rDB := &entities.Room{
 		Name: room.Name,
 	}
 
-	err := s.io.SaveRoom(ctx, rDb)
+	err := s.io.SaveRoom(ctx, rDB)
 	if err != nil {
 		return err
 	}
-	room.ID = rDb.ID
-	room.CreatedAt = rDb.CreatedAt
-	room.UpdatedAt = rDb.UpdatedAt
+	room.ID = rDB.ID
+	room.CreatedAt = rDB.CreatedAt
+	room.UpdatedAt = rDB.UpdatedAt
 
 	return nil
 }

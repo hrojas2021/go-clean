@@ -14,16 +14,16 @@ const dbType = "postgres"
 func InitDB(config *conf.Configuration) *sqlx.DB {
 	host := os.Getenv("DB_HOST")
 	if host == "" {
-		host = config.DB.HOST
+		host = config.DB.Host
 	}
 
 	dbConnection := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
 		host,
-		config.DB.USER,
-		config.DB.PASSWORD,
-		config.DB.NAME,
-		config.DB.PORT,
-		config.DB.SSL,
+		config.DB.User,
+		config.DB.Password,
+		config.DB.Name,
+		config.DB.Port,
+		config.DB.Ssl,
 	)
 	db, err := sqlx.Open(dbType, dbConnection)
 	if err != nil {

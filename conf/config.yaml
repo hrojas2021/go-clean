@@ -1,18 +1,30 @@
 DB:
-  HOST: "postgres"
-  USER: "root"
-  PASSWORD: "root"
-  NAME: "go-clean"
-  PORT: "5432"
-  SSL: "disable"
-
+  Host: "postgres"
+  User: "root"
+  Password: "root"
+  Name: "go-clean"
+  Port: "5432"
+  Ssl: "disable"
+Jobs:
+  Enabled: false
+  Concurrency: 10
+  RedisAddress: "localhost:6379"
 Telemetry:
   Enabled: true
   Name: "Boilerplate Project"
   JaegerURL: "http://127.0.0.1:14268/api/traces"
   Version: "1"
   Filepath: ""
-JWT:
-  SECRET: ZTP02X517M4PUND7
-  EXPIRATION: 60 
-PORT: 9000
+Logger:
+  OutputPath: "/var/log/project/debug.log"
+  ErrOutputPath: "/var/log/project/error.log"
+  DefaultPath: "/Users/hugorojas/go/src/go-clean/debug.log"
+  MaxSize: 300
+  MaxBackups: 3
+  MaxAge: 15
+Jwt:
+  Secret: ZTP02X517M4PUND7
+  Expiration: 60 
+Port: 9000
+ServerTimeout: 3
+IsProduction: false

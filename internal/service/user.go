@@ -17,7 +17,7 @@ func (s *Service) ListUser(ctx context.Context) ([]entities.User, error) {
 }
 
 func (s *Service) GetSecret() []byte {
-	return []byte(s.config.JWT.SECRET)
+	return []byte(s.config.Jwt.Secret)
 }
 
 func (s *Service) Login(ctx context.Context, user models.User) (*models.JWT, error) {
@@ -30,7 +30,7 @@ func (s *Service) Login(ctx context.Context, user models.User) (*models.JWT, err
 		return nil, err
 	}
 
-	token, err := createJWT(s.config.JWT, user.Username)
+	token, err := createJWT(s.config.Jwt, user.Username)
 	if err != nil {
 		return nil, err
 	}
@@ -40,17 +40,17 @@ func (s *Service) Login(ctx context.Context, user models.User) (*models.JWT, err
 	return jwt, nil
 }
 
-func createJWT(config conf.SecuriyConfiguration, username string) (string, error) {
+func createJWT(config conf.SecurityConfiguration, username string) (string, error) {
 	var tokenStr string
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		return tokenStr, errors.New("error while fetching the claims;")
 	}
-	claims["exp"] = time.Now().Add(time.Duration(config.EXPIRATION) * time.Minute).Unix()
+	claims["exp"] = time.Now().Add(time.Duration(config.Expiration) * time.Minute).Unix()
 	claims["username"] = username
 
-	tokenStr, err := token.SignedString([]byte(config.SECRET))
+	tokenStr, err := token.SignedString([]byte(config.Secret))
 
 	if err != nil {
 		fmt.Println(err.Error())

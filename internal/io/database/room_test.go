@@ -15,7 +15,6 @@ import (
 )
 
 func TestCreateRoom(t *testing.T) {
-	t.Parallel()
 	ctx := context.Background()
 	mdb, mock, err := sqlmock.New()
 	require.Nil(t, err)
@@ -25,7 +24,6 @@ func TestCreateRoom(t *testing.T) {
 	room := entities.Room{Name: "Fake Room"}
 	errInternalTestError := errors.New("internal query error")
 	t.Run("IO success", func(t *testing.T) {
-		t.Parallel()
 		sqlxDB := sqlx.NewDb(mdb, "postgres")
 		io := New(sqlxDB)
 
@@ -41,7 +39,6 @@ func TestCreateRoom(t *testing.T) {
 	})
 
 	t.Run("Query error - Io Fail", func(t *testing.T) {
-		t.Parallel()
 		sqlxDB := sqlx.NewDb(mdb, "postgres")
 		io := New(sqlxDB)
 
@@ -57,7 +54,6 @@ func TestCreateRoom(t *testing.T) {
 	})
 
 	t.Run("Rows affected - Io Fail", func(t *testing.T) {
-		t.Parallel()
 		sqlxDB := sqlx.NewDb(mdb, "postgres")
 		io := New(sqlxDB)
 
@@ -77,7 +73,6 @@ func TestCreateRoom(t *testing.T) {
 	})
 
 	t.Run("Rows 0 - Io Fail", func(t *testing.T) {
-		t.Parallel()
 		sqlxDB := sqlx.NewDb(mdb, "postgres")
 		io := New(sqlxDB)
 
@@ -90,10 +85,6 @@ func TestCreateRoom(t *testing.T) {
 		err := io.SaveRoom(ctx, &entities.Room{Name: "Room"})
 		require.Error(t, err)
 		assert.Equal(t, "could not create room; 0 rows affected", err.Error())
-	})
-
-	t.Cleanup(func() {
-		// Nothing to clean up
 	})
 }
 

@@ -13,6 +13,8 @@ import (
 	"github.com/hugo.rojas/custom-api/internal/http/rest"
 	"github.com/hugo.rojas/custom-api/internal/io"
 	"github.com/hugo.rojas/custom-api/internal/io/database"
+	"github.com/hugo.rojas/custom-api/internal/jobs"
+	"github.com/hugo.rojas/custom-api/internal/logger"
 	"github.com/hugo.rojas/custom-api/internal/service"
 	"github.com/hugo.rojas/custom-api/internal/telemetry"
 	"github.com/uptrace/bunrouter"
@@ -27,16 +29,20 @@ import (
 	"go.uber.org/zap"
 )
 
+const (
+	asyncJobs = "jobs"
+)
+
 type server struct {
 	srv *http.Server
 }
 
-func newServer(r *bunrouter.CompatRouter, h string) server {
+func newServer(r *bunrouter.CompatRouter, h string, timeout int) server {
 	return server{
 		srv: &http.Server{
 			Addr:              h,
 			Handler:           r,
-			ReadHeaderTimeout: 3 * time.Second,
+			ReadHeaderTimeout: time.Duration(timeout) * time.Second,
 		},
 	}
 }
@@ -45,8 +51,22 @@ func main() {
 	ctx, shutdown := context.WithCancel(context.Background())
 	defer shutdown()
 	config := conf.LoadViperConfig()
+	loggerConfig := zap.NewDevelopmentConfig()
+
+	if config.IsProduction {
+		loggerConfig = zap.NewProductionConfig()
+		loggerConfig.OutputPaths = []string{config.Logger.OutputPath}
+		loggerConfig.ErrorOutputPaths = []string{config.Logger.ErrOutputPath}
+	}
+
+	logger := logger.NewZapLogger(&config.Logger, loggerConfig, !config.IsProduction)
+	defer func() {
+		if err := logger.Sync(); err != nil {
+			panic(err)
+		}
+	}()
+
 	db := database.InitDB(config)
-	logger, _ := zap.NewProduction()
 
 	io := io.New(database.New(db))
 	var tp *trace.TracerProvider
@@ -63,9 +83,11 @@ func main() {
 		service = telemetry.NewService(service, tp)
 	}
 
+	jobs.InitJobsQueue(*config, logger.Named(asyncJobs), service)
+
 	r := rest.InitRoutes(service)
-	addr := fmt.Sprintf("%v:%v", "", config.PORT)
-	srv := newServer(r, addr)
+	addr := fmt.Sprintf("%v:%v", "", config.Port)
+	srv := newServer(r, addr, config.ServerTimeout)
 	listenAndServe(ctx, &srv)
 }
 

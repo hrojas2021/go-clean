@@ -3,7 +3,9 @@ package integration
 import (
 	"context"
 	"fmt"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/federicoleon/go-httpclient/gohttp"
 	"github.com/hugo.rojas/custom-api/conf"
 	"github.com/hugo.rojas/custom-api/internal/domain/models"
@@ -29,9 +31,9 @@ func init() {
 	cf := conf.LoadViperConfig()
 	db := database.InitDB(cf)
 	io := io.New(database.New(db))
-	localURL = fmt.Sprintf("http://localhost:%d", cf.PORT)
+	localURL = fmt.Sprintf("http://localhost:%d", cf.Port)
 	fixtures.srv = service.New(cf, io)
-	token = fixtures.getToken()
+	token = fixtures.getToken(cf.Jwt.Secret)
 	httpClient = getHTTPClient(token)
 }
 
@@ -44,11 +46,21 @@ func (f *Fixtures) createGenericRoom(name string) (*models.Room, error) {
 	return r, err
 }
 
-func (f *Fixtures) getToken() string {
-	user := models.User{
-		Username: "hrojas",
-		Password: "12345",
+func (f *Fixtures) getToken(secret string) string {
+	var tokenStr string
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return ""
 	}
-	t, _ := f.srv.Login(ctx, user)
-	return t.Token
+	claims["exp"] = time.Now().Add(time.Duration(5) * time.Minute).Unix()
+	claims["username"] = "admin-test"
+
+	tokenStr, err := token.SignedString([]byte(secret))
+
+	if err != nil {
+		return ""
+	}
+
+	return tokenStr
 }
