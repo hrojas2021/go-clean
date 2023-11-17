@@ -14,7 +14,7 @@ import (
 
 type ImageProcessor struct{}
 
-func NewImageProcessor(service iface.Service) *ImageProcessor {
+func NewImageProcessor(_ iface.Service) *ImageProcessor {
 	return &ImageProcessor{}
 }
 
@@ -33,7 +33,7 @@ func NewImageResizeTask() *asynq.Task {
 	return asynq.NewTask(TypeImageResize, payload, asynq.MaxRetry(5), asynq.Timeout(5*time.Second))
 }
 
-func (ip *ImageProcessor) ProcessTask(ctx context.Context, t *asynq.Task) error {
+func (ip *ImageProcessor) ProcessTask(_ context.Context, t *asynq.Task) error {
 	var p ImageResizePayload
 	if err := json.Unmarshal(t.Payload(), &p); err != nil {
 		return fmt.Errorf("json.Unmarshal failed %v> %w", err, asynq.SkipRetry)
