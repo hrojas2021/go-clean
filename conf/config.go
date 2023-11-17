@@ -32,15 +32,38 @@ type SecuriyConfiguration struct {
 	EXPIRATION int
 }
 
+// JobsConfiguration holds all jobs tasks configuration
+type JobsConfiguration struct {
+	Enabled      bool
+	Concurrency  int
+	RedisAddress string
+}
+
+// LoggerConfiguration holds all logger configuration
+type LoggerConfiguration struct {
+	OUTPUT_PATH     string
+	ERR_OUTPUT_PATH string
+	DEFAULT_PATH    string
+	MAX_SIZE        int
+	MAX_BACKUPS     int
+	MAX_AGE         int
+}
+
 // Configuration holds all configuration for this project
 type Configuration struct {
-	JWT       SecuriyConfiguration
-	PORT      int `default:"9000"`
-	DB        DBConfiguration
-	Telemetry TelemetryConfiguration
+	JWT            SecuriyConfiguration
+	PORT           int `default:"9000"`
+	DB             DBConfiguration
+	LOGGER         LoggerConfiguration
+	SERVER_TIMEOUT int
+	Jobs           JobsConfiguration
+	Telemetry      TelemetryConfiguration
+	IS_PRODUCTION  bool
 }
 
 func LoadViperConfig() *Configuration {
+	// viper.AutomaticEnv()
+	// viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.SetConfigName("config")
 	viper.AddConfigPath("./conf")
 	viper.AddConfigPath("../conf")

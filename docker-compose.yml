@@ -3,7 +3,7 @@ services:
   postgres:
     container_name: postgres
     image: postgres:latest
-    volumes: 
+    volumes:
       - ../.project-data/postgresql:/var/lib/postgresql/data/
     environment:
       - POSTGRES_PASSWORD=root
@@ -15,7 +15,17 @@ services:
       timeout: 5s
       retries: 5
     ports:
-      - "5432:5432"
+      - 5432:5432
+    networks:
+      - internal
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379
+    environment:
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=3
     networks:
       - internal
   adminer:
@@ -42,4 +52,3 @@ services:
 networks:
   internal:
     driver: bridge
-  
