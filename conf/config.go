@@ -41,12 +41,12 @@ type JobsConfiguration struct {
 
 // LoggerConfiguration holds all logger configuration
 type LoggerConfiguration struct {
-	OUTPUT_PATH     string
-	ERR_OUTPUT_PATH string
-	DEFAULT_PATH    string
-	MAX_SIZE        int
-	MAX_BACKUPS     int
-	MAX_AGE         int
+	OutputPath    string
+	ErrOutputPath string
+	DefaultPath   string
+	MaxSize       int
+	MaxBackups    int
+	MaxAge        int
 }
 
 // Configuration holds all configuration for this project

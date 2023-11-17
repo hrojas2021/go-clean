@@ -55,8 +55,8 @@ func main() {
 
 	if config.IS_PRODUCTION {
 		loggerConfig = zap.NewProductionConfig()
-		loggerConfig.OutputPaths = []string{config.LOGGER.OUTPUT_PATH}
-		loggerConfig.ErrorOutputPaths = []string{config.LOGGER.ERR_OUTPUT_PATH}
+		loggerConfig.OutputPaths = []string{config.LOGGER.OutputPath}
+		loggerConfig.ErrorOutputPaths = []string{config.LOGGER.ErrOutputPath}
 	}
 
 	logger := logger.NewZapLogger(&config.LOGGER, loggerConfig, !config.IS_PRODUCTION)

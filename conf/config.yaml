@@ -15,13 +15,13 @@ Telemetry:
   JaegerURL: "http://127.0.0.1:14268/api/traces"
   Version: "1"
   Filepath: ""
-LOGGER:
-  OUTPUT_PATH: "/var/log/project/debug.log"
-  ERR_OUTPUT_PATH: "/var/log/project/error.log"
-  DEFAULT_PATH: "/Users/hugorojas/go/src/go-clean/debug.log"
-  MAX_SIZE: 300
-  MAX_BACKUPS: 3
-  MAX_AGE: 15
+Logger:
+  OutputPath: "/var/log/project/debug.log"
+  ErrOutputPath: "/var/log/project/error.log"
+  DefaultPath: "/Users/hugorojas/go/src/go-clean/debug.log"
+  MaxSize: 300
+  MaxBackups: 3
+  MaxAge: 15
 JWT:
   SECRET: ZTP02X517M4PUND7
   EXPIRATION: 60 

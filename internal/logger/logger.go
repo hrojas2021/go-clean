@@ -13,10 +13,10 @@ import (
 func NewZapLogger(c *conf.LoggerConfiguration, conf zap.Config, isLocal bool) *zap.Logger {
 	conf.EncoderConfig = setCustomEncoder()
 	syncer := zapcore.AddSync(&lumberjack.Logger{
-		Filename:   c.DEFAULT_PATH,
-		MaxSize:    c.MAX_SIZE,
-		MaxBackups: c.MAX_BACKUPS,
-		MaxAge:     c.MAX_AGE,
+		Filename:   c.DefaultPath,
+		MaxSize:    c.MaxSize,
+		MaxBackups: c.MaxBackups,
+		MaxAge:     c.MaxAge,
 	})
 
 	if isLocal {
